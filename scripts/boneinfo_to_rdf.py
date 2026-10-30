@@ -29,8 +29,9 @@ from pyproj import Transformer
 from rdflib import Dataset, Namespace, URIRef, Literal, BNode
 from rdflib.namespace import RDF, RDFS, XSD, SKOS, OWL
 
-IN_DIR = Path(r"C:\Users\enterprise\AppData\Local\Temp\boneinfo_export")
-OUT_DIR = Path(r"C:\AI\BoneInfo\output")
+REPO_ROOT = Path(__file__).resolve().parent.parent
+IN_DIR = REPO_ROOT / "data" / "csv"
+OUT_DIR = REPO_ROOT / "output"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 ap = argparse.ArgumentParser()

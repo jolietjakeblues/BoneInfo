@@ -38,12 +38,22 @@ function val(binding, key) {
 
 export async function fetchSoorten(clusterUri) {
   const query = `${PREFIXES}
-SELECT ?occ ?naam ?wetenschappelijk ?taxon ?opmerking WHERE {
+SELECT ?occ ?naam ?naamEn ?wetenschappelijk ?taxon ?opmerking
+       ?rang ?authorship ?kingdom ?phylum ?klasse ?orde ?familie ?genus WHERE {
   GRAPH <${GRAPH}> {
     <${clusterUri}> ceo:bevatObject ?occ .
     ?occ bo:heeftTaxon ?taxon .
     OPTIONAL { ?taxon dwc:vernacularName ?naam . FILTER(lang(?naam) = "nl") }
+    OPTIONAL { ?taxon dwc:vernacularName ?naamEn . FILTER(lang(?naamEn) = "en") }
     OPTIONAL { ?taxon dwc:scientificName ?wetenschappelijk }
+    OPTIONAL { ?taxon dwc:taxonRank ?rang }
+    OPTIONAL { ?taxon dwc:scientificNameAuthorship ?authorship }
+    OPTIONAL { ?taxon dwc:kingdom ?kingdom }
+    OPTIONAL { ?taxon dwc:phylum ?phylum }
+    OPTIONAL { ?taxon dwc:class ?klasse }
+    OPTIONAL { ?taxon dwc:order ?orde }
+    OPTIONAL { ?taxon dwc:family ?familie }
+    OPTIONAL { ?taxon dwc:genus ?genus }
     OPTIONAL { ?occ rdfs:comment ?opmerking }
   }
 } ORDER BY ?occ`;
@@ -51,8 +61,17 @@ SELECT ?occ ?naam ?wetenschappelijk ?taxon ?opmerking WHERE {
   return rows.map((b) => ({
     taxonUri: val(b, 'taxon'),
     naam: val(b, 'naam'),
+    naamEn: val(b, 'naamEn'),
     wetenschappelijk: val(b, 'wetenschappelijk'),
     opmerking: val(b, 'opmerking'),
+    rang: val(b, 'rang'),
+    authorship: val(b, 'authorship'),
+    kingdom: val(b, 'kingdom'),
+    phylum: val(b, 'phylum'),
+    klasse: val(b, 'klasse'),
+    orde: val(b, 'orde'),
+    familie: val(b, 'familie'),
+    genus: val(b, 'genus'),
   }));
 }
 
@@ -81,4 +100,26 @@ SELECT ?pub ?auteur ?titel ?jaar ?tijdschrift ?deel WHERE {
 export async function fetchDetail(clusterUri) {
   const [soorten, literatuur] = await Promise.all([fetchSoorten(clusterUri), fetchLiteratuur(clusterUri)]);
   return { soorten, literatuur };
+}
+
+// Live totalen voor "De collectie" bovenaan de pagina — rechtstreeks geteld
+// in de brondataset, zodat dit nooit uit de pas loopt met wat er echt staat.
+export async function fetchCollectionStats() {
+  const query = `${PREFIXES}
+SELECT
+  (COUNT(DISTINCT ?occ) AS ?soorten)
+  (COUNT(DISTINCT ?pub) AS ?literatuur)
+WHERE {
+  GRAPH <${GRAPH}> {
+    { ?cluster ceo:bevatObject ?occ . ?occ bo:heeftTaxon [] }
+    UNION
+    { ?pub schema:about ?anyCluster }
+  }
+}`;
+  const rows = await runSelect(query);
+  const row = rows[0] || {};
+  return {
+    soorten: Number(val(row, 'soorten') ?? 0),
+    literatuur: Number(val(row, 'literatuur') ?? 0),
+  };
 }

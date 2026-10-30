@@ -31,6 +31,19 @@
   </header>
 
   <main>
+    <section class="intro">
+      <div class="intro-text">
+        <p class="eyebrow">Archeologie · Onderzoek en gegevens</p>
+        <h1>Archeozoölogisch onderzoek in Nederland</h1>
+        <p>Zoek in archeozoölogische onderzoeksclusters en ontdek de bijbehorende diersoorten, vindplaatsen en literatuur.</p>
+      </div>
+      <dl id="collection-stats" class="stats" aria-label="De collectie">
+        <div class="stat"><dt>Onderzoeksclusters</dt><dd data-stat="clusters">…</dd></div>
+        <div class="stat"><dt>Soortvermeldingen</dt><dd data-stat="soorten">…</dd></div>
+        <div class="stat"><dt>Literatuurverwijzingen</dt><dd data-stat="literatuur">…</dd></div>
+      </dl>
+    </section>
+
     <form id="search-form" class="searchbar" role="search">
       <label for="q" class="sr-only">Doorzoek BoneInfo</label>
       <input id="q" type="search" placeholder="Zoek bijvoorbeeld op rund, Nijmegen of Lauwerier…" autocomplete="off" />
@@ -89,7 +102,7 @@
               <option value="binnen">Valt helemaal binnen</option>
             </select>
           </label>
-          <p class="hint">Negatief = v.Chr. Clusters zonder jaartal vallen buiten deze filter.</p>
+          <p class="hint">Negatief = v.Chr. Dateringen die overlappen tellen mee bij "Overlapt". Clusters zonder jaartal vallen altijd buiten deze filter.</p>
         </fieldset>
 
         <details class="more-fields">
@@ -112,14 +125,17 @@
       <section class="results-panel" aria-label="Resultaten">
         <div class="results-head">
           <span id="result-count" class="result-count"></span>
-          <label class="sort-label">
-            Sorteer op
-            <select id="sort">
-              <option value="relevantie">Relevantie</option>
-              <option value="jaar">Beginjaar</option>
-              <option value="plaats">Plaats A–Z</option>
-            </select>
-          </label>
+          <div class="results-actions">
+            <button type="button" id="download-csv" class="ghost-btn">Download CSV ↓</button>
+            <label class="sort-label">
+              Sorteer op
+              <select id="sort">
+                <option value="relevantie">Relevantie</option>
+                <option value="jaar">Beginjaar</option>
+                <option value="plaats">Plaats A–Z</option>
+              </select>
+            </label>
+          </div>
         </div>
         <p id="status" class="status" role="status" aria-live="polite"></p>
         <div id="results" class="results-list"></div>
@@ -127,7 +143,10 @@
       </section>
 
       <section class="map-panel" aria-label="Kaart">
-        <h2>Waar is het materiaal gevonden?</h2>
+        <div class="map-head">
+          <h2>Waar is het materiaal gevonden?</h2>
+          <button type="button" id="download-geojson" class="ghost-btn">GeoJSON ↓</button>
+        </div>
         <p id="map-status" class="map-status"></p>
         <div id="map"></div>
         <ul class="legend">
@@ -150,6 +169,7 @@
         <button id="detail-close" class="link-btn" type="button">Sluiten ✕</button>
       </div>
       <h2 id="detail-title"></h2>
+      <button type="button" id="detail-copy-link" class="link-btn">Kopieer link naar dit cluster</button>
       <div id="detail-body"></div>
     </div>
   </div>

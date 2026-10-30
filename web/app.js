@@ -1,6 +1,48 @@
-import { search, facets, fields, hitSource, jaarTekst, PAGE_SIZE } from './search.js';
+import { search, searchAll, findByZoonr, facets, fields, hitSource, jaarTekst, PAGE_SIZE } from './search.js';
 import { parsePoint, centroidLatLon } from './geo.js';
-import { fetchDetail } from './detail.js';
+import { fetchDetail, fetchCollectionStats } from './detail.js';
+import { fetchGerelateerdErfgoed } from './related.js';
+
+// De brondatabase heeft voor "diergroep" alleen Engelstalige categorieën
+// (geen Nederlandse variant bestaat in BoneInfo zelf). Vertaling is alleen
+// voor de wéérgave — de facet filtert nog altijd op de originele Engelse
+// waarde, dat hoeft niet opnieuw geïndexeerd te worden.
+const DIERGROEP_NL = {
+  'amphibians': 'amfibieën',
+  'anadrome fishes': 'anadrome vissen (trekvissen)',
+  'arthropods': 'geleedpotigen',
+  'domestic fowl': 'gedomesticeerd pluimvee',
+  'domestic mammals': 'gedomesticeerde zoogdieren',
+  'fresh-water fishes': 'zoetwatervissen',
+  'freshwater molluscs': 'zoetwaterweekdieren',
+  'land molluscs': 'landweekdieren (slakken)',
+  'marine molluscs': 'mariene weekdieren',
+  'marine molluscs; bivalvia': 'mariene weekdieren; tweekleppigen',
+  'marine molluscs; cephalopoda': 'mariene weekdieren; koppotigen',
+  'marine molluscs; gastropoda': 'mariene weekdieren; buikpotigen',
+  'marine molluscs; scaphopoda': 'mariene weekdieren; tandschelpen',
+  'other amphibians': 'overige amfibieën',
+  'other animals': 'overige dieren',
+  'other birds': 'overige vogels',
+  'other fishes': 'overige vissen',
+  'other mammals': 'overige zoogdieren',
+  'other molluscs': 'overige weekdieren',
+  'other reptiles': 'overige reptielen',
+  'reptiles': 'reptielen',
+  'sea-fishes': 'zeevissen',
+  'wild 1: game (or wild/domestic)': 'wild 1: jachtwild (wild of gedomesticeerd)',
+  'wild 2: sea mammals': 'wild 2: zeezoogdieren',
+  'wild 3: insectivora': 'wild 3: insecteneters',
+  'wild 4: other rodents': 'wild 4: overige knaagdieren',
+  'wild bird': 'wilde vogel',
+  'wild birds': 'wilde vogels',
+  'wild or domestic birds': 'wilde of gedomesticeerde vogels',
+};
+
+function facetLabel(key, value) {
+  if (key === 'diergroep') return DIERGROEP_NL[value] || value;
+  return value;
+}
 
 const el = (tag, cls, text) => {
   const n = document.createElement(tag);
@@ -65,7 +107,11 @@ function renderMap(aggs) {
   const statusEl = qs('#map-status');
   if (statusEl) {
     const totaal = lastResponse?.hits?.total?.value ?? 0;
-    statusEl.textContent = `${plotted} locatie${plotted === 1 ? '' : 's'} op de kaart, ${totaal} cluster${totaal === 1 ? '' : 's'} totaal.`;
+    const opKaart = buckets.reduce((sum, b) => sum + b.doc_count, 0);
+    const zonderCoordinaten = Math.max(0, totaal - opKaart);
+    const bits = [`${plotted} locatie${plotted === 1 ? '' : 's'} op de kaart`, `${totaal} cluster${totaal === 1 ? '' : 's'} totaal`];
+    if (zonderCoordinaten > 0) bits.push(`${zonderCoordinaten} zonder coördinaten`);
+    statusEl.textContent = bits.join(', ') + '.';
   }
 }
 
@@ -93,7 +139,7 @@ function renderFacets(aggs) {
       input.checked = active.has(b.key);
       input.addEventListener('change', () => toggleFacet(key, b.key, input.checked));
       label.appendChild(input);
-      label.appendChild(el('span', null, `${b.key} (${b.doc_count})`));
+      label.appendChild(el('span', null, `${facetLabel(key, b.key)} (${b.doc_count})`));
       box.appendChild(label);
     }
   }
@@ -202,6 +248,29 @@ async function openDetail(hit) {
   panel.hidden = false;
   panel.setAttribute('aria-busy', 'true');
   qs('#detail-title', panel).textContent = clusterTitle(src);
+  const zoonr = src.one(fields.zoonr);
+  if (zoonr != null) {
+    const url = new URL(location.href);
+    url.searchParams.set('cluster', zoonr);
+    history.replaceState(null, '', url.pathname + url.search);
+  }
+  qs('#detail-copy-link').onclick = () => {
+    const btn = qs('#detail-copy-link');
+    const orig = btn.textContent;
+    const flash = (text) => {
+      btn.textContent = text;
+      setTimeout(() => { btn.textContent = orig; }, 2200);
+    };
+    const copyPromise = navigator.clipboard?.writeText(location.href);
+    if (!copyPromise) {
+      showManualCopyLink(location.href);
+      return;
+    }
+    copyPromise.then(
+      () => flash('Link gekopieerd ✓'),
+      () => showManualCopyLink(location.href) // clipboard-permissie geweigerd: handmatig kopiëren aanbieden
+    );
+  };
   qs('#detail-body', panel).innerHTML = '<p class="loading">Bezig met laden…</p>';
   document.body.classList.add('detail-open');
 
@@ -241,6 +310,15 @@ async function openDetail(hit) {
     body.appendChild(el('p', 'description', omschrijving));
   }
 
+  const waarnemingsnummer = src.one(fields.waarnemingsnummer);
+  const vondstmeldingsnummer = src.one(fields.vondstmeldingsnummer);
+  let erfgoedBox = null;
+  if (waarnemingsnummer || vondstmeldingsnummer) {
+    body.appendChild(el('h3', null, 'Gerelateerd erfgoed (RCE)'));
+    erfgoedBox = el('div', 'loading', 'Bezig met opzoeken…');
+    body.appendChild(erfgoedBox);
+  }
+
   body.appendChild(el('h3', null, 'Diersoorten'));
   const soortenBox = el('div', 'loading', 'Bezig met laden…');
   body.appendChild(soortenBox);
@@ -263,6 +341,60 @@ async function openDetail(hit) {
   } finally {
     panel.removeAttribute('aria-busy');
   }
+
+  if (erfgoedBox) {
+    try {
+      const gerelateerd = await fetchGerelateerdErfgoed({ waarnemingsnummer, vondstmeldingsnummer });
+      renderGerelateerdErfgoed(erfgoedBox, gerelateerd);
+    } catch (e) {
+      erfgoedBox.className = 'error';
+      erfgoedBox.textContent = 'Kon het erfgoedregister niet bevragen: ' + e.message;
+    }
+  }
+}
+
+function renderGerelateerdErfgoed(box, items) {
+  box.className = '';
+  box.innerHTML = '';
+  if (!items.length) {
+    box.appendChild(
+      el('p', 'empty', 'Geen match gevonden in de RCE-erfgoeddata op dit waarnemings-/meldingsnummer.')
+    );
+    return;
+  }
+  box.appendChild(
+    el(
+      'p',
+      'hint',
+      'Gevonden op gelijk waarnemings- of meldingsnummer — geen bevestigde identiteitskoppeling, maar een sterke aanwijzing voor hetzelfde onderzoek.'
+    )
+  );
+  const ul = el('ul', 'related-list');
+  for (const item of items) {
+    const li = el('li');
+    const a = document.createElement('a');
+    a.href = item.zoekdemoUrl || item.uri; // bij voorkeur de zoeksite zelf, niet de ruwe LDV-pagina
+    a.target = '_blank';
+    a.rel = 'noopener';
+    const bits = [item.naam, item.gemeente, item.provincie].filter(Boolean);
+    a.textContent = `${item.klasseLabel}${bits.length ? ': ' + bits.join(', ') : ''}`;
+    li.appendChild(a);
+    if (item.aantalObjecten > 0) {
+      li.appendChild(el('span', 'ref-sub', ` · bevat ${item.aantalObjecten} gekoppelde objecten in het CHO-register`));
+    }
+    if (item.zoekdemoUrl) {
+      const raw = document.createElement('a');
+      raw.href = item.uri;
+      raw.target = '_blank';
+      raw.rel = 'noopener';
+      raw.className = 'ref-sub-link';
+      raw.textContent = 'Linked Data (CHO)';
+      li.appendChild(document.createTextNode(' · '));
+      li.appendChild(raw);
+    }
+    ul.appendChild(li);
+  }
+  box.appendChild(ul);
 }
 
 function renderSoortenTable(box, soorten) {
@@ -274,17 +406,58 @@ function renderSoortenTable(box, soorten) {
   }
   const table = el('table', 'detail-table');
   const thead = el('thead');
-  thead.innerHTML = '<tr><th>Naam</th><th>Wetenschappelijke naam</th><th>Opmerking</th></tr>';
+  thead.innerHTML = '<tr><th>Naam</th><th>Wetenschappelijke naam</th><th>Opmerking</th><th></th></tr>';
   table.appendChild(thead);
   const tbody = el('tbody');
   for (const s of soorten) {
     const tr = el('tr');
-    tr.appendChild(el('td', null, s.naam || '—'));
+    const naamTd = el('td', null, s.naam || s.naamEn || '—');
+    if (!s.naam && s.naamEn) naamTd.appendChild(el('span', 'tag-en', ' (EN)'));
+    tr.appendChild(naamTd);
     const sci = el('td');
     sci.appendChild(el('em', null, s.wetenschappelijk || '—'));
     tr.appendChild(sci);
     tr.appendChild(el('td', null, s.opmerking || '—'));
-    tbody.appendChild(tr);
+
+    const taxonomie = [
+      ['Rang', s.rang],
+      ['Autoriteit', s.authorship],
+      ['Rijk', s.kingdom],
+      ['Stam', s.phylum],
+      ['Klasse', s.klasse],
+      ['Orde', s.orde],
+      ['Familie', s.familie],
+      ['Geslacht', s.genus],
+      ['Engelse naam', s.naamEn],
+      ['Taxon-ID', s.taxonUri ? s.taxonUri.split('/').pop() : null],
+    ].filter(([, v]) => v);
+
+    const toggleTd = el('td');
+    if (taxonomie.length) {
+      const toggle = el('button', 'tax-toggle', '▸ Taxonomie en namen');
+      toggle.type = 'button';
+      const taxRow = el('tr', 'tax-row');
+      taxRow.hidden = true;
+      const taxTd = el('td');
+      taxTd.colSpan = 4;
+      const dl = el('dl', 'detail-grid tax-grid');
+      for (const [label, value] of taxonomie) {
+        dl.appendChild(el('dt', null, label));
+        dl.appendChild(el('dd', null, String(value)));
+      }
+      taxTd.appendChild(dl);
+      taxRow.appendChild(taxTd);
+      toggle.addEventListener('click', () => {
+        taxRow.hidden = !taxRow.hidden;
+        toggle.textContent = (taxRow.hidden ? '▸' : '▾') + ' Taxonomie en namen';
+      });
+      toggleTd.appendChild(toggle);
+      tbody.appendChild(tr);
+      tbody.appendChild(taxRow);
+    } else {
+      tbody.appendChild(tr);
+    }
+    tr.appendChild(toggleTd);
   }
   table.appendChild(tbody);
   box.appendChild(table);
@@ -312,9 +485,132 @@ function renderLiteratuurList(box, literatuur) {
   box.appendChild(ol);
 }
 
+// Fallback als navigator.clipboard niet beschikbaar is of de permissie
+// geweigerd wordt: toon de link in een geselecteerd invoerveld zodat de
+// gebruiker 'm zelf met Ctrl/Cmd+C kan kopiëren.
+function showManualCopyLink(url) {
+  let box = qs('#manual-copy-box');
+  if (!box) {
+    box = el('div', 'manual-copy');
+    box.id = 'manual-copy-box';
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.readOnly = true;
+    box.appendChild(el('span', null, 'Kopiëren lukte niet automatisch — selecteer en kopieer handmatig:'));
+    box.appendChild(input);
+    qs('#detail-copy-link').insertAdjacentElement('afterend', box);
+  }
+  const input = qs('input', box);
+  input.value = url;
+  box.hidden = false;
+  input.focus();
+  input.select();
+}
+
 function closeDetail() {
   qs('#detail-panel').hidden = true;
   document.body.classList.remove('detail-open');
+  const manualCopy = qs('#manual-copy-box');
+  if (manualCopy) manualCopy.hidden = true;
+  const url = new URL(location.href);
+  if (url.searchParams.has('cluster')) {
+    url.searchParams.delete('cluster');
+    history.replaceState(null, '', url.pathname + (url.search || ''));
+  }
+}
+
+async function loadCollectionStats() {
+  try {
+    const { soorten, literatuur } = await fetchCollectionStats();
+    qs('[data-stat="soorten"]').textContent = soorten.toLocaleString('nl-NL');
+    qs('[data-stat="literatuur"]').textContent = literatuur.toLocaleString('nl-NL');
+  } catch (e) {
+    qs('[data-stat="soorten"]').textContent = '—';
+    qs('[data-stat="literatuur"]').textContent = '—';
+  }
+}
+
+// CSV-veiligheid: een cel die begint met =, +, - of @ kan door Excel/Sheets
+// als formule gelezen worden ("CSV-injectie"). Daarom een ' ervoor.
+function csvCell(value) {
+  let s = value == null ? '' : String(value);
+  if (/^[=+\-@]/.test(s)) s = "'" + s;
+  s = s.replace(/"/g, '""');
+  return /[",\n]/.test(s) ? `"${s}"` : s;
+}
+
+function downloadBlob(filename, content, type) {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+async function downloadCsv() {
+  const btn = qs('#download-csv');
+  const origText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Bezig…';
+  try {
+    const hits = await searchAll(state);
+    const header = [
+      'clusternummer', 'waarnemingsnummer', 'onderzoeksmeldingsnummer', 'toponiem', 'plaats',
+      'gemeente', 'provincie', 'complextype', 'beginperiode', 'eindperiode', 'beginjaar', 'eindjaar',
+      'diersoorten', 'onderzoeker', 'onderzoeksinstantie', 'url',
+    ];
+    const lines = [header.join(',')];
+    for (const hit of hits) {
+      const s = hitSource(hit);
+      lines.push(
+        [
+          s.one(fields.zoonr), s.one(fields.waarnemingsnummer), s.one(fields.vondstmeldingsnummer),
+          s.one(fields.locatienaam), s.one(fields.plaats), s.one(fields.gemeente), s.one(fields.provincie),
+          s.one(fields.complextype), s.one(fields.beginperiode), s.one(fields.eindperiode),
+          s.one(fields.beginjaar), s.one(fields.eindjaar), s.many(fields.diersoort).join('; '),
+          s.one(fields.onderzoeker), s.one(fields.onderzoeksinstantie), hit._id,
+        ]
+          .map(csvCell)
+          .join(',')
+      );
+    }
+    downloadBlob('boneinfo-clusters.csv', lines.join('\r\n'), 'text/csv;charset=utf-8');
+  } catch (e) {
+    alert('CSV-export mislukt: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = origText;
+  }
+}
+
+function downloadGeoJson() {
+  const buckets = lastResponse?.aggregations?.kaart?.locaties?.buckets ?? [];
+  const features = buckets
+    .map((b) => {
+      const latlon = centroidLatLon(b);
+      if (!latlon) return null;
+      return {
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [latlon[1], latlon[0]] },
+        properties: { aantal_clusters: b.doc_count },
+      };
+    })
+    .filter(Boolean);
+  const fc = { type: 'FeatureCollection', features };
+  downloadBlob('boneinfo-kaart.geojson', JSON.stringify(fc, null, 2), 'application/geo+json');
+}
+
+async function openDetailByZoonr(zoonr) {
+  try {
+    const hit = await findByZoonr(zoonr);
+    if (hit) openDetail(hit);
+  } catch (e) {
+    /* stille fout: deep link kon niet geopend worden, gewone zoekpagina blijft werken */
+  }
 }
 
 function syncFormFromState() {
@@ -356,6 +652,10 @@ function clearAll() {
   run();
 }
 
+function isUnfiltered() {
+  return !state.search && Object.keys(state.filters).length === 0;
+}
+
 let runToken = 0;
 async function run() {
   const token = ++runToken;
@@ -370,6 +670,9 @@ async function run() {
     renderResults(data);
     renderFacets(data.aggregations);
     renderMap(data.aggregations);
+    if (isUnfiltered()) {
+      qs('[data-stat="clusters"]').textContent = data.hits.total.value.toLocaleString('nl-NL');
+    }
   } catch (e) {
     if (token !== runToken) return;
     status.textContent = e.message || 'Er ging iets mis.';
@@ -396,9 +699,35 @@ function wireUp() {
     state.filters.modus = e.target.value;
     run();
   });
+  qs('#download-csv').addEventListener('click', downloadCsv);
+  qs('#download-geojson').addEventListener('click', downloadGeoJson);
+
+  // De vrije-tekstvelden en jaartallen in de zijbalk passen zichzelf toe
+  // (net als de facet-checkboxes hierboven), zodat je na het typen niet
+  // eerst helemaal naar de "Zoeken"-knop bovenaan hoeft te scrollen.
+  const liveInputs = ['#gemeente', '#diersoort', '#onderzoek', '#literatuur', '#clusternummer', '#vanaf', '#tot'];
+  const applyFilters = debounce(() => {
+    readFormIntoState();
+    run();
+  }, 450);
+  for (const sel of liveInputs) {
+    qs(sel).addEventListener('input', applyFilters);
+  }
+}
+
+function debounce(fn, delay) {
+  let timer = null;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
+  };
 }
 
 map = initMap();
 wireUp();
 syncFormFromState();
+loadCollectionStats();
 run();
+
+const initialCluster = new URLSearchParams(location.search).get('cluster');
+if (initialCluster) openDetailByZoonr(initialCluster);

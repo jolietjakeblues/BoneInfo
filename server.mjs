@@ -1,7 +1,7 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 const types = { html: 'text/html', css: 'text/css', js: 'text/javascript', svg: 'image/svg+xml', png: 'image/png' };
-const files = new Set(['index.html', 'style.css', 'app.js', 'search.js', 'geo.js', 'detail.js', 'favicon.svg', '404.html']);
+const files = new Set(['index.html', 'style.css', 'app.js', 'search.js', 'geo.js', 'detail.js', 'related.js', 'favicon.svg', '404.html']);
 // Dezelfde headers als online (web/_headers, blok "/*"), zodat CSP-fouten ook lokaal zichtbaar zijn.
 const headers = Object.fromEntries((await readFile(new URL('./web/_headers', import.meta.url), 'utf-8')).split('\n').filter(line => /^\s+[\w-]+:/.test(line)).map(line => { const [key, ...rest] = line.trim().split(':'); return [key, rest.join(':').trim()]; }));
 createServer(async (req, res) => {

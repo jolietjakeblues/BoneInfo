@@ -1,0 +1,9 @@
+BoneInfo_V01_10_64b.mdb
+BoneInfo_V01_10.mdb
+.claude/launch.json
+.wrangler/
+node_modules/
+__pycache__/
+*.pyc
+.claude/launch.json
+.claude/launch.json
