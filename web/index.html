@@ -25,98 +25,102 @@
       <span class="brand-mark">B</span>
       <div>
         <strong>BoneInfo</strong>
-        <div class="brand-sub">Archeozoölogische database — Rijksdienst voor het Cultureel Erfgoed</div>
+        <div class="brand-sub" data-i18n="brandSub">Archeozoölogische database — Rijksdienst voor het Cultureel Erfgoed</div>
       </div>
+    </div>
+    <div class="lang-toggle" role="group" aria-label="Taal / Language">
+      <button type="button" id="lang-nl" class="lang-btn" aria-pressed="true">NL</button>
+      <button type="button" id="lang-en" class="lang-btn" aria-pressed="false">EN</button>
     </div>
   </header>
 
   <main>
     <section class="intro">
       <div class="intro-text">
-        <p class="eyebrow">Archeologie · Onderzoek en gegevens</p>
-        <h1>Archeozoölogisch onderzoek in Nederland</h1>
-        <p>Zoek in archeozoölogische onderzoeksclusters en ontdek de bijbehorende diersoorten, vindplaatsen en literatuur.</p>
+        <p class="eyebrow" data-i18n="eyebrow">Archeologie · Onderzoek en gegevens</p>
+        <h1 data-i18n="introTitle">Archeozoölogisch onderzoek in Nederland</h1>
+        <p data-i18n="introText">Zoek in archeozoölogische onderzoeksclusters en ontdek de bijbehorende diersoorten, vindplaatsen en literatuur.</p>
       </div>
       <dl id="collection-stats" class="stats" aria-label="De collectie">
-        <div class="stat"><dt>Onderzoeksclusters</dt><dd data-stat="clusters">…</dd></div>
-        <div class="stat"><dt>Soortvermeldingen</dt><dd data-stat="soorten">…</dd></div>
-        <div class="stat"><dt>Literatuurverwijzingen</dt><dd data-stat="literatuur">…</dd></div>
+        <div class="stat"><dt data-i18n="statClusters">Onderzoeksclusters</dt><dd data-stat="clusters">…</dd></div>
+        <div class="stat"><dt data-i18n="statSpecies">Soortvermeldingen</dt><dd data-stat="soorten">…</dd></div>
+        <div class="stat"><dt data-i18n="statLiterature">Literatuurverwijzingen</dt><dd data-stat="literatuur">…</dd></div>
       </dl>
     </section>
 
     <form id="search-form" class="searchbar" role="search">
-      <label for="q" class="sr-only">Doorzoek BoneInfo</label>
-      <input id="q" type="search" placeholder="Zoek bijvoorbeeld op rund, Nijmegen of Lauwerier…" autocomplete="off" />
-      <button type="submit">Zoeken</button>
+      <label for="q" class="sr-only" data-i18n="searchLabel">Doorzoek BoneInfo</label>
+      <input id="q" type="search" data-i18n-placeholder="searchPlaceholder" placeholder="Zoek bijvoorbeeld op rund, Nijmegen of Lauwerier…" autocomplete="off" />
+      <button type="submit" data-i18n="searchButton">Zoeken</button>
     </form>
-    <p class="search-hint">
+    <p class="search-hint" data-i18n="searchHint">
       Zoekt in locaties, beschrijvingen, soorten en literatuur. Gebruik aanhalingstekens voor een exacte zin.
     </p>
 
     <div class="workspace">
       <aside class="sidebar" aria-label="Filters">
         <div class="sidebar-head">
-          <h2>Verfijn je zoekopdracht</h2>
-          <button type="button" id="clear" class="link-btn">Wis alles</button>
+          <h2 data-i18n="filtersHeading">Verfijn je zoekopdracht</h2>
+          <button type="button" id="clear" class="link-btn" data-i18n="clearAll">Wis alles</button>
         </div>
 
         <div class="facet" data-facet="provincie">
-          <h3>Provincie</h3>
+          <h3 data-i18n="facetProvincie">Provincie</h3>
           <div class="facet-values"></div>
         </div>
 
         <div class="field">
-          <label for="gemeente">Plaats of gemeente</label>
-          <input id="gemeente" type="text" placeholder="Bijvoorbeeld Amsterdam" />
+          <label for="gemeente" data-i18n="fieldGemeenteLabel">Plaats of gemeente</label>
+          <input id="gemeente" type="text" data-i18n-placeholder="fieldGemeentePlaceholder" placeholder="Bijvoorbeeld Amsterdam" />
         </div>
 
         <div class="facet" data-facet="complextype">
-          <h3>Complextype</h3>
+          <h3 data-i18n="facetComplextype">Complextype</h3>
           <div class="facet-values"></div>
         </div>
 
         <div class="field">
-          <label for="diersoort">Diersoort</label>
-          <input id="diersoort" type="text" placeholder="Nederlandse of Latijnse naam" />
+          <label for="diersoort" data-i18n="fieldDiersoortLabel">Diersoort</label>
+          <input id="diersoort" type="text" data-i18n-placeholder="fieldDiersoortPlaceholder" placeholder="Nederlandse of Latijnse naam" />
         </div>
 
         <div class="facet" data-facet="diergroep">
-          <h3>Diergroep</h3>
+          <h3 data-i18n="facetDiergroep">Diergroep</h3>
           <div class="facet-values"></div>
         </div>
 
         <div class="facet" data-facet="beginperiode">
-          <h3>Archeologische periode</h3>
+          <h3 data-i18n="facetPeriode">Archeologische periode</h3>
           <div class="facet-values"></div>
         </div>
 
         <fieldset class="field jaar-field">
-          <legend>Periode (jaartallen)</legend>
+          <legend data-i18n="jaarLegend">Periode (jaartallen)</legend>
           <div class="jaar-inputs">
-            <label>Vanaf jaar <input id="vanaf" type="number" placeholder="bv. -800" /></label>
-            <label>Tot en met jaar <input id="tot" type="number" placeholder="bv. 1500" /></label>
+            <label><span data-i18n="jaarVanaf">Vanaf jaar</span> <input id="vanaf" type="number" placeholder="bv. -800" /></label>
+            <label><span data-i18n="jaarTot">Tot en met jaar</span> <input id="tot" type="number" placeholder="bv. 1500" /></label>
           </div>
           <label class="jaar-modus-label">
             <select id="jaar-modus">
-              <option value="overlapt">Overlapt de periode</option>
-              <option value="binnen">Valt helemaal binnen</option>
+              <option value="overlapt" data-i18n="jaarModusOverlapt">Overlapt de periode</option>
+              <option value="binnen" data-i18n="jaarModusBinnen">Valt helemaal binnen</option>
             </select>
           </label>
-          <p class="hint">Negatief = v.Chr. Dateringen die overlappen tellen mee bij "Overlapt". Clusters zonder jaartal vallen altijd buiten deze filter.</p>
+          <p class="hint" data-i18n="jaarHint">Negatief = v.Chr. Dateringen die overlappen tellen mee bij "Overlapt". Clusters zonder jaartal vallen altijd buiten deze filter.</p>
         </fieldset>
 
         <details class="more-fields">
-          <summary>Meer zoekvelden</summary>
+          <summary data-i18n="moreFields">Meer zoekvelden</summary>
           <div class="field">
-            <label for="onderzoek">Onderzoeker / instantie</label>
+            <label for="onderzoek" data-i18n="fieldOnderzoekLabel">Onderzoeker / instantie</label>
             <input id="onderzoek" type="text" />
           </div>
           <div class="field">
-            <label for="literatuur">Literatuur (auteur, titel, tijdschrift)</label>
+            <label for="literatuur" data-i18n="fieldLiteratuurLabel">Literatuur (auteur, titel, tijdschrift)</label>
             <input id="literatuur" type="text" />
           </div>
           <div class="field">
-            <label for="clusternummer">Clusternummer</label>
+            <label for="clusternummer" data-i18n="fieldClusternummerLabel">Clusternummer</label>
             <input id="clusternummer" type="text" inputmode="numeric" />
           </div>
         </details>
@@ -126,13 +130,13 @@
         <div class="results-head">
           <span id="result-count" class="result-count"></span>
           <div class="results-actions">
-            <button type="button" id="download-csv" class="ghost-btn">Download CSV ↓</button>
+            <button type="button" id="download-csv" class="ghost-btn" data-i18n="downloadCsv">Download CSV ↓</button>
             <label class="sort-label">
-              Sorteer op
+              <span data-i18n="sortLabel">Sorteer op</span>
               <select id="sort">
-                <option value="relevantie">Relevantie</option>
-                <option value="jaar">Beginjaar</option>
-                <option value="plaats">Plaats A–Z</option>
+                <option value="relevantie" data-i18n="sortRelevantie">Relevantie</option>
+                <option value="jaar" data-i18n="sortJaar">Beginjaar</option>
+                <option value="plaats" data-i18n="sortPlaats">Plaats A–Z</option>
               </select>
             </label>
           </div>
@@ -144,8 +148,8 @@
 
       <section class="map-panel" aria-label="Kaart">
         <div class="map-head">
-          <h2>Waar is het materiaal gevonden?</h2>
-          <button type="button" id="download-geojson" class="ghost-btn">GeoJSON ↓</button>
+          <h2 data-i18n="mapTitle">Waar is het materiaal gevonden?</h2>
+          <button type="button" id="download-geojson" class="ghost-btn" data-i18n="downloadGeoJson">GeoJSON ↓</button>
         </div>
         <p id="map-status" class="map-status"></p>
         <div id="map"></div>
@@ -157,7 +161,7 @@
           <li><span class="dot c5"></span> 26–50</li>
           <li><span class="dot c6"></span> 51+</li>
         </ul>
-        <p class="hint">Cirkels groeperen clusters op (vrijwel) dezelfde brongeometrie. Klik om in te zoomen.</p>
+        <p class="hint" data-i18n="mapLegendHint">Cirkels groeperen clusters op (vrijwel) dezelfde brongeometrie. Klik om in te zoomen.</p>
       </section>
     </div>
   </main>
@@ -165,11 +169,11 @@
   <div id="detail-panel" class="detail-overlay" hidden>
     <div class="detail-panel" role="dialog" aria-modal="true" aria-labelledby="detail-title">
       <div class="detail-head">
-        <span class="detail-kicker">Clusterdetail</span>
-        <button id="detail-close" class="link-btn" type="button">Sluiten ✕</button>
+        <span class="detail-kicker" data-i18n="detailKicker">Clusterdetail</span>
+        <button id="detail-close" class="link-btn" type="button" data-i18n="detailClose">Sluiten ✕</button>
       </div>
       <h2 id="detail-title"></h2>
-      <button type="button" id="detail-copy-link" class="link-btn">Kopieer link naar dit cluster</button>
+      <button type="button" id="detail-copy-link" class="link-btn" data-i18n="detailCopyLink">Kopieer link naar dit cluster</button>
       <div id="detail-body"></div>
     </div>
   </div>
