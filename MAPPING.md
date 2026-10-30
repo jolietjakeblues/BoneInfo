@@ -1,10 +1,13 @@
 # BoneInfo → RDF: ontologie-mapping
 
+> Zie [README.md](README.md) voor het totaalbeeld (dataset, Elastic-service,
+> zoeksite, kruislink). Dit document gaat alleen over de RDF-mapping zelf.
+
 Bron: `BoneInfo_V01_10.mdb` (Access). Volledige dataset: 2.434 clusters,
 273.542 triples, in één named graph (TriG). Daarnaast een pilot-subset van
 30 clusters die zowel diersoorten als publicaties hebben, voor snelle review.
 
-Bestanden:
+Bestanden (in [`output/`](output/)):
 - `boneinfo_full.trig` (273.542 triples) / `boneinfo_full_es.ndjson` (2.434 docs)
 - `boneinfo_pilot.trig` (5.047 triples) / `boneinfo_pilot_es.ndjson` (30 docs)
 
@@ -171,10 +174,15 @@ hoeven genereren.
 
 Het script (`scripts/boneinfo_to_rdf.py`) ondersteunt beide:
 
+```bash
+pip install -r scripts/requirements.txt
+python scripts/boneinfo_to_rdf.py            # volledige dataset -> output/boneinfo_full.trig / output/boneinfo_full_es.ndjson
+python scripts/boneinfo_to_rdf.py --pilot 30 # pilot subset     -> output/boneinfo_pilot.trig / output/boneinfo_pilot_es.ndjson
 ```
-python boneinfo_to_rdf.py            # volledige dataset -> boneinfo_full.trig / boneinfo_full_es.ndjson
-python boneinfo_to_rdf.py --pilot 30 # pilot subset     -> boneinfo_pilot.trig / boneinfo_pilot_es.ndjson
-```
+
+Het script leest de brontabellen uit CSV-exports van de Access-database (zie
+`IN_DIR` bovenin het script); zie [README.md](README.md) voor hoe je die
+CSV's zelf opnieuw exporteert.
 
 De volledige dataset is al gegenereerd: 2.434 clusters, 1.183 van de 1.390
 soorten gebruikt, 184 tijdschriften, 51 periode-concepten, **273.542

@@ -61,7 +61,7 @@ const SEARCH_FIELDS = [
   fields.gemeente,
   fields.provincie,
   fields.diersoort,
-  `${fields.wetenschappelijkeNaam}.keyword`,
+  fields.wetenschappelijkeNaam,
   fields.titel,
   fields.auteur,
   fields.onderzoeker,
@@ -69,15 +69,22 @@ const SEARCH_FIELDS = [
   fields.tijdschrift,
 ];
 
+// "bool_prefix": het laatste (nog onvolledig getypte) woord mag een
+// voorvoegsel zijn, overige woorden moeten volledig matchen (operator
+// 'and'). Zonder dit vereiste simple_query_string een heel woord — "Lauw"
+// vond dan niets voor "Lauwerier", pas het hele woord "Lauwerier" werkte.
+function prefixQuery(query, fieldList) {
+  return { multi_match: { query, type: 'bool_prefix', operator: 'and', fields: fieldList } };
+}
+
 function textQuery(q) {
   if (!q || !q.trim()) return { match_all: {} };
-  return {
-    simple_query_string: {
-      query: q,
-      fields: SEARCH_FIELDS,
-      default_operator: 'and',
-    },
-  };
+  // Dubbele aanhalingstekens = bewust een exacte zin: dan niet aan prefix-
+  // matching doen, dat zou de garantie op een letterlijke zin ondermijnen.
+  if (q.includes('"')) {
+    return { simple_query_string: { query: q, fields: SEARCH_FIELDS, default_operator: 'and' } };
+  }
+  return prefixQuery(q, SEARCH_FIELDS);
 }
 
 // Eén filterclausule per facet/veld. `exclude` laat een facet zijn eigen
@@ -93,40 +100,16 @@ export function filterClauses(filters = {}, exclude = null) {
     }
   }
   if (exclude !== 'gemeente' && filters.gemeente) {
-    clauses.push({
-      simple_query_string: {
-        query: filters.gemeente,
-        fields: [fields.gemeente, fields.plaats],
-        default_operator: 'and',
-      },
-    });
+    clauses.push(prefixQuery(filters.gemeente, [fields.gemeente, fields.plaats]));
   }
   if (exclude !== 'diersoort' && filters.diersoort) {
-    clauses.push({
-      simple_query_string: {
-        query: filters.diersoort,
-        fields: [fields.diersoort, `${fields.wetenschappelijkeNaam}.keyword`],
-        default_operator: 'and',
-      },
-    });
+    clauses.push(prefixQuery(filters.diersoort, [fields.diersoort, fields.wetenschappelijkeNaam]));
   }
   if (exclude !== 'onderzoek' && filters.onderzoek) {
-    clauses.push({
-      simple_query_string: {
-        query: filters.onderzoek,
-        fields: [fields.onderzoeker, fields.onderzoeksinstantie, fields.opdrachtgever],
-        default_operator: 'and',
-      },
-    });
+    clauses.push(prefixQuery(filters.onderzoek, [fields.onderzoeker, fields.onderzoeksinstantie, fields.opdrachtgever]));
   }
   if (exclude !== 'literatuur' && filters.literatuur) {
-    clauses.push({
-      simple_query_string: {
-        query: filters.literatuur,
-        fields: [fields.titel, fields.auteur, fields.tijdschrift],
-        default_operator: 'and',
-      },
-    });
+    clauses.push(prefixQuery(filters.literatuur, [fields.titel, fields.auteur, fields.tijdschrift]));
   }
   if (exclude !== 'clusternummer' && filters.clusternummer) {
     clauses.push({ term: { [`${fields.zoonr}.keyword`]: String(filters.clusternummer).trim() } });
@@ -211,12 +194,16 @@ export function buildQuery({ search = '', filters = {}, page = 0, sort = 'releva
   };
 }
 
-function escapeRegExp(s) {
-  return String(s).replace(/[/]/g, '\\/');
+// Grens voor een "exporteer alles wat nu gefilterd is"-query (CSV/GeoJSON).
+// Ruim boven de volledige datasetgrootte (2.434 clusters), dus nooit afgekapt.
+const MAX_EXPORT = 3000;
+
+export function buildExportQuery({ search = '', filters = {}, sort = 'relevantie' } = {}) {
+  const q = buildQuery({ search, filters, page: 0, sort });
+  return { ...q, size: MAX_EXPORT, aggs: undefined, highlight: undefined };
 }
 
-export async function search(state) {
-  const body = buildQuery(state);
+async function runEsQuery(body) {
   let res;
   try {
     res = await fetch(ES_ENDPOINT, {
@@ -239,6 +226,24 @@ export async function search(state) {
     throw new Error(`Zoekopdracht mislukt (${res.status}). ${detail}`.trim());
   }
   return res.json();
+}
+
+export async function search(state) {
+  return runEsQuery(buildQuery(state));
+}
+
+export async function searchAll(state) {
+  const data = await runEsQuery(buildExportQuery(state));
+  return data.hits.hits;
+}
+
+// Eén document op zoonr (bv. een cluster openen via een gedeelde link).
+export async function findByZoonr(zoonr) {
+  const data = await runEsQuery({
+    size: 1,
+    query: { term: { [`${fields.zoonr}.keyword`]: String(zoonr) } },
+  });
+  return data.hits.hits[0] || null;
 }
 
 export function hitSource(hit) {
