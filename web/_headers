@@ -1,0 +1,10 @@
+# Beveiligings- en indexeringsheaders voor alle bestanden (Cloudflare Workers Static Assets).
+# CSP: eigen bestanden, Leaflet van unpkg (met SRI), kaarttegels van PDOK, Elastic-service +
+# SPARQL-endpoint bij dezelfde Triply-host (api.linkeddata.cultureelerfgoed.nl).
+# style-src 'unsafe-inline' is nodig voor de <style> in 404.html; Leaflet zet stijlen via JavaScript.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src 'self' data: https://service.pdok.nl https://unpkg.com; connect-src https://api.linkeddata.cultureelerfgoed.nl; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  X-Robots-Tag: noindex

@@ -1,0 +1,7 @@
+{
+  // Cloudflare Worker die alleen de statische bestanden uit web/ serveert (geen Worker-script).
+  // De browser praat zelf rechtstreeks met de Elasticsearch-service en het SPARQL-endpoint.
+  "name": "boneinfo-zoeksite",
+  "compatibility_date": "2026-10-30",
+  "assets": { "directory": "./web", "not_found_handling": "404-page" }
+}

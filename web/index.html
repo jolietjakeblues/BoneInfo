@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BoneInfo — Archeozoölogisch onderzoek in Nederland</title>
+  <meta name="description" content="Zoek in archeozoölogische onderzoeksclusters van RCE BoneInfo: vindplaatsen, diersoorten en literatuur." />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-mark">B</span>
+      <div>
+        <strong>BoneInfo</strong>
+        <div class="brand-sub">Archeozoölogische database — Rijksdienst voor het Cultureel Erfgoed</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <form id="search-form" class="searchbar" role="search">
+      <label for="q" class="sr-only">Doorzoek BoneInfo</label>
+      <input id="q" type="search" placeholder="Zoek bijvoorbeeld op rund, Nijmegen of Lauwerier…" autocomplete="off" />
+      <button type="submit">Zoeken</button>
+    </form>
+    <p class="search-hint">
+      Zoekt in locaties, beschrijvingen, soorten en literatuur. Gebruik aanhalingstekens voor een exacte zin.
+    </p>
+
+    <div class="workspace">
+      <aside class="sidebar" aria-label="Filters">
+        <div class="sidebar-head">
+          <h2>Verfijn je zoekopdracht</h2>
+          <button type="button" id="clear" class="link-btn">Wis alles</button>
+        </div>
+
+        <div class="facet" data-facet="provincie">
+          <h3>Provincie</h3>
+          <div class="facet-values"></div>
+        </div>
+
+        <div class="field">
+          <label for="gemeente">Plaats of gemeente</label>
+          <input id="gemeente" type="text" placeholder="Bijvoorbeeld Amsterdam" />
+        </div>
+
+        <div class="facet" data-facet="complextype">
+          <h3>Complextype</h3>
+          <div class="facet-values"></div>
+        </div>
+
+        <div class="field">
+          <label for="diersoort">Diersoort</label>
+          <input id="diersoort" type="text" placeholder="Nederlandse of Latijnse naam" />
+        </div>
+
+        <div class="facet" data-facet="diergroep">
+          <h3>Diergroep</h3>
+          <div class="facet-values"></div>
+        </div>
+
+        <div class="facet" data-facet="beginperiode">
+          <h3>Archeologische periode</h3>
+          <div class="facet-values"></div>
+        </div>
+
+        <fieldset class="field jaar-field">
+          <legend>Periode (jaartallen)</legend>
+          <div class="jaar-inputs">
+            <label>Vanaf jaar <input id="vanaf" type="number" placeholder="bv. -800" /></label>
+            <label>Tot en met jaar <input id="tot" type="number" placeholder="bv. 1500" /></label>
+          </div>
+          <label class="jaar-modus-label">
+            <select id="jaar-modus">
+              <option value="overlapt">Overlapt de periode</option>
+              <option value="binnen">Valt helemaal binnen</option>
+            </select>
+          </label>
+          <p class="hint">Negatief = v.Chr. Clusters zonder jaartal vallen buiten deze filter.</p>
+        </fieldset>
+
+        <details class="more-fields">
+          <summary>Meer zoekvelden</summary>
+          <div class="field">
+            <label for="onderzoek">Onderzoeker / instantie</label>
+            <input id="onderzoek" type="text" />
+          </div>
+          <div class="field">
+            <label for="literatuur">Literatuur (auteur, titel, tijdschrift)</label>
+            <input id="literatuur" type="text" />
+          </div>
+          <div class="field">
+            <label for="clusternummer">Clusternummer</label>
+            <input id="clusternummer" type="text" inputmode="numeric" />
+          </div>
+        </details>
+      </aside>
+
+      <section class="results-panel" aria-label="Resultaten">
+        <div class="results-head">
+          <span id="result-count" class="result-count"></span>
+          <label class="sort-label">
+            Sorteer op
+            <select id="sort">
+              <option value="relevantie">Relevantie</option>
+              <option value="jaar">Beginjaar</option>
+              <option value="plaats">Plaats A–Z</option>
+            </select>
+          </label>
+        </div>
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+        <div id="results" class="results-list"></div>
+        <nav id="pager" class="pager" aria-label="Paginering"></nav>
+      </section>
+
+      <section class="map-panel" aria-label="Kaart">
+        <h2>Waar is het materiaal gevonden?</h2>
+        <p id="map-status" class="map-status"></p>
+        <div id="map"></div>
+        <ul class="legend">
+          <li><span class="dot c1"></span> 1</li>
+          <li><span class="dot c2"></span> 2–5</li>
+          <li><span class="dot c3"></span> 6–10</li>
+          <li><span class="dot c4"></span> 11–25</li>
+          <li><span class="dot c5"></span> 26–50</li>
+          <li><span class="dot c6"></span> 51+</li>
+        </ul>
+        <p class="hint">Cirkels groeperen clusters op (vrijwel) dezelfde brongeometrie. Klik om in te zoomen.</p>
+      </section>
+    </div>
+  </main>
+
+  <div id="detail-panel" class="detail-overlay" hidden>
+    <div class="detail-panel" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+      <div class="detail-head">
+        <span class="detail-kicker">Clusterdetail</span>
+        <button id="detail-close" class="link-btn" type="button">Sluiten ✕</button>
+      </div>
+      <h2 id="detail-title"></h2>
+      <div id="detail-body"></div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

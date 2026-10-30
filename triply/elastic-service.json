@@ -1,0 +1,407 @@
+{
+  "type": "elasticSearch",
+  "name": "Boneinfo",
+  "config": {
+    "indexTemplates": [
+      {
+        "name": "boneinfo-elastic",
+        "index_patterns": "index",
+        "composed_of": [
+          "boneinfo-elastic-tekst",
+          "boneinfo-elastic-typen"
+        ]
+      }
+    ],
+    "componentTemplates": [
+      {
+        "name": "boneinfo-elastic-tekst",
+        "template": {
+          "settings": {
+            "analysis": {
+              "filter": {
+                "nl_stop": {
+                  "type": "stop",
+                  "stopwords": "_dutch_"
+                },
+                "nl_stam": {
+                  "type": "stemmer",
+                  "language": "dutch_kp"
+                },
+                "nl_meervoud": {
+                  "type": "stemmer_override",
+                  "rules": [
+                    "molen, molens => molen",
+                    "toren, torens => toren",
+                    "kasteel, kastelen => kasteel",
+                    "gracht, grachten => gracht",
+                    "sluis, sluizen => sluis",
+                    "dijk, dijken => dijk",
+                    "woning, woningen => woning",
+                    "paalgat, paalgaten => paalgat",
+                    "paalspoor, paalsporen => paalspoor",
+                    "graf, graven => graf",
+                    "crematiegraf, crematiegraven => crematiegraf",
+                    "inhumatiegraf, inhumatiegraven => inhumatiegraf",
+                    "vlakgraf, vlakgraven => vlakgraf",
+                    "familiegraf, familiegraven => familiegraf",
+                    "kindergraf, kindergraven => kindergraf",
+                    "diergraf, diergraven => diergraf",
+                    "dierengraf, dierengraven => dierengraf",
+                    "urnenveld, urnenvelden => urnenveld",
+                    "grafveld, grafvelden => grafveld"
+                  ]
+                },
+                "nl_samenstellingen": {
+                  "type": "dictionary_decompounder",
+                  "only_longest_match": true,
+                  "min_subword_size": 4,
+                  "word_list": [
+                    "molen", "toren", "boerderij", "schuur", "woning", "brug",
+                    "sluis", "gemaal", "poort", "gracht", "kasteel", "fort",
+                    "school", "pakhuis", "kapel", "klooster", "gasthuis",
+                    "hofje", "villa", "station", "fabriek", "watertoren",
+                    "vuurtoren", "begraafplaats", "grafheuvel", "wierde",
+                    "bastion", "kazerne", "orgel", "luidklok", "uurwerk",
+                    "kuil", "greppel", "aardewerk", "keramiek", "haard",
+                    "schrabber"
+                  ]
+                },
+                "erfgoed_synoniemen": {
+                  "type": "synonym_graph",
+                  "synonyms": [
+                    "kerk, godshuis => kerk, godshuis, kerkgebouw, parochiekerk, dorpskerk, kruiskerk, zaalkerk, hallenkerk, schuilkerk, kerktoren",
+                    "dijk => dijk, liniedijk, lekdijk, zeedijk, maasdijk, waaldijk, rivierdijk, kanaaldijk, ijsseldijk, lingedijk, grebbeliniedijk, spoordijk",
+                    "begraafplaats, kerkhof, dodenakker",
+                    "boerderij, hoeve",
+                    "kasteel, burcht",
+                    "pastorie, predikantswoning",
+                    "woonhuis, woning",
+                    "terp, terpen, wierde, wierden => terp, wierde, huisterp, dorpsterp, kerkterp, woonterp, veenterp, hoogterp, kernterp, terpje, terpdorp, terprest, terprestant, terplaag, terpzool, terplichaam, terpaardewerk, terpenaardewerk, terpboerderij, terpbebouwing, terpvorming, terpafgraving, huiswierde, dorpswierde, kerkwierde, wierdelaag, wierdezool, wierdelichaam, wierdedorp, wierdebebouwing, wierdekerkhof",
+                    "vesting, vestingwerk",
+                    "keramiek => keramiek, aardewerk, steengoed, porselein, faience, fayence",
+                    "hunebed, megalietgraf",
+                    "graf => graf, grafheuvel, grafmonument, grafveld, crematiegraf, inhumatiegraf, mensengraf, diergraf, dierengraf, familiegraf, kindergraf, vlakgraf, massagraf, urnengraf, megalietgraf, grafkapel, grafkelder, grafkuil, grafkist, grafsteen, grafzerk, grafteken, grafkruis, grafcultuur",
+                    "paal, palen => paal, paalkuil, paalgat, paalspoor, paalkrans, paalrij, palenrij, paalfundering, paalkern, grenspaal, trappaal, stoeppaal, dijkpaal, mijlpaal, nummerpaal, heipaal, hoekpaal, lantaarnpaal, gerechtspaal, galgpaal"
+                  ]
+                }
+              },
+              "analyzer": {
+                "nl_index": {
+                  "type": "custom",
+                  "char_filter": [
+                    "punt_tussen_letters", "dubbele_punt", "geen_dakkapel",
+                    "geen_kapelaan", "geen_kapelle", "geen_kuile",
+                    "geen_kuilenburg", "geen_haardijk"
+                  ],
+                  "tokenizer": "standard",
+                  "filter": [
+                    "lowercase", "asciifolding", "nl_meervoud",
+                    "nl_samenstellingen", "nl_meervoud", "nl_stop", "nl_stam"
+                  ]
+                },
+                "nl_zoeken": {
+                  "type": "custom",
+                  "char_filter": [
+                    "punt_tussen_letters", "dubbele_punt", "geen_dakkapel",
+                    "geen_kapelaan", "geen_kapelle", "geen_kuile",
+                    "geen_kuilenburg", "geen_haardijk"
+                  ],
+                  "tokenizer": "standard",
+                  "filter": [
+                    "lowercase", "asciifolding", "nl_meervoud",
+                    "erfgoed_synoniemen", "nl_stop", "nl_stam"
+                  ]
+                },
+                "nl_exact": {
+                  "type": "custom",
+                  "char_filter": ["punt_tussen_letters", "dubbele_punt"],
+                  "tokenizer": "standard",
+                  "filter": ["lowercase", "asciifolding"]
+                }
+              },
+              "char_filter": {
+                "punt_tussen_letters": {
+                  "type": "pattern_replace",
+                  "pattern": "(?<=\\p{L})\\.(?=\\p{L})",
+                  "replacement": " "
+                },
+                "dubbele_punt": {
+                  "type": "pattern_replace",
+                  "pattern": ":",
+                  "replacement": " "
+                },
+                "geen_dakkapel": {
+                  "type": "pattern_replace",
+                  "pattern": "dakkapel",
+                  "replacement": "dakcapel",
+                  "flags": "CASE_INSENSITIVE"
+                },
+                "geen_kapelaan": {
+                  "type": "pattern_replace",
+                  "pattern": "kapela",
+                  "replacement": "capela",
+                  "flags": "CASE_INSENSITIVE"
+                },
+                "geen_kapelle": {
+                  "type": "pattern_replace",
+                  "pattern": "kapelle(?![nt])",
+                  "replacement": "capelle",
+                  "flags": "CASE_INSENSITIVE"
+                },
+                "geen_kuile": {
+                  "type": "pattern_replace",
+                  "pattern": "kuile(?!n)",
+                  "replacement": "cuile",
+                  "flags": "CASE_INSENSITIVE"
+                },
+                "geen_kuilenburg": {
+                  "type": "pattern_replace",
+                  "pattern": "kuil(?=enburg)|(?<=ker)kuil",
+                  "replacement": "cuil",
+                  "flags": "CASE_INSENSITIVE"
+                },
+                "geen_haardijk": {
+                  "type": "pattern_replace",
+                  "pattern": "haard(?=ijk)|(?<=sc)haard",
+                  "replacement": "haerd",
+                  "flags": "CASE_INSENSITIVE"
+                }
+              }
+            }
+          },
+          "mappings": {
+            "dynamic_templates": [
+              {
+                "tekst_nl": {
+                  "match_mapping_type": "string",
+                  "mapping": {
+                    "type": "text",
+                    "analyzer": "nl_index",
+                    "search_analyzer": "nl_zoeken",
+                    "fields": {
+                      "keyword": { "type": "keyword", "ignore_above": 256 },
+                      "exact": { "type": "text", "analyzer": "nl_exact" }
+                    }
+                  }
+                }
+              }
+            ],
+            "properties": {
+              "@id": {
+                "type": "text",
+                "fields": {
+                  "keyword": { "type": "keyword", "ignore_above": 256 }
+                }
+              },
+
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#complextype": {
+                "type": "text",
+                "analyzer": "nl_index",
+                "search_analyzer": "nl_zoeken",
+                "fields": {
+                  "keyword": { "type": "keyword", "ignore_above": 256 },
+                  "exact": { "type": "text", "analyzer": "nl_exact" }
+                }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#omschrijving": {
+                "type": "text",
+                "analyzer": "nl_index",
+                "search_analyzer": "nl_zoeken",
+                "fields": {
+                  "keyword": { "type": "keyword", "ignore_above": 256 },
+                  "exact": { "type": "text", "analyzer": "nl_exact" }
+                }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#verzamelwijze": {
+                "type": "text",
+                "analyzer": "nl_index",
+                "search_analyzer": "nl_zoeken",
+                "fields": {
+                  "keyword": { "type": "keyword", "ignore_above": 256 },
+                  "exact": { "type": "text", "analyzer": "nl_exact" }
+                }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#vondstverwerving": {
+                "type": "text",
+                "analyzer": "nl_index",
+                "search_analyzer": "nl_zoeken",
+                "fields": {
+                  "keyword": { "type": "keyword", "ignore_above": 256 },
+                  "exact": { "type": "text", "analyzer": "nl_exact" }
+                }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#omvang": {
+                "type": "text",
+                "analyzer": "nl_index",
+                "search_analyzer": "nl_zoeken",
+                "fields": {
+                  "keyword": { "type": "keyword", "ignore_above": 256 },
+                  "exact": { "type": "text", "analyzer": "nl_exact" }
+                }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#diersoort": {
+                "type": "text",
+                "analyzer": "nl_index",
+                "search_analyzer": "nl_zoeken",
+                "fields": {
+                  "keyword": { "type": "keyword", "ignore_above": 256 },
+                  "exact": { "type": "text", "analyzer": "nl_exact" }
+                }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#wetenschappelijkeNaam": {
+                "type": "text",
+                "analyzer": "nl_exact",
+                "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#diergroep": {
+                "type": "text",
+                "analyzer": "nl_index",
+                "search_analyzer": "nl_zoeken",
+                "fields": {
+                  "keyword": { "type": "keyword", "ignore_above": 256 },
+                  "exact": { "type": "text", "analyzer": "nl_exact" }
+                }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#titel": {
+                "type": "text",
+                "analyzer": "nl_index",
+                "search_analyzer": "nl_zoeken",
+                "fields": {
+                  "keyword": { "type": "keyword", "ignore_above": 256 },
+                  "exact": { "type": "text", "analyzer": "nl_exact" }
+                }
+              },
+
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#locatienaam": {
+                "type": "text",
+                "analyzer": "nl_exact",
+                "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#plaats": {
+                "type": "text",
+                "analyzer": "nl_exact",
+                "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#gemeente": {
+                "type": "text",
+                "analyzer": "nl_exact",
+                "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#provincie": {
+                "type": "text",
+                "analyzer": "nl_exact",
+                "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#opdrachtgever": {
+                "type": "text",
+                "analyzer": "nl_exact",
+                "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#onderzoeksinstantie": {
+                "type": "text",
+                "analyzer": "nl_exact",
+                "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#onderzoeker": {
+                "type": "text",
+                "analyzer": "nl_exact",
+                "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#invoerder": {
+                "type": "text",
+                "analyzer": "nl_exact",
+                "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#auteur": {
+                "type": "text",
+                "analyzer": "nl_exact",
+                "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#tijdschrift": {
+                "type": "text",
+                "analyzer": "nl_exact",
+                "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#vondstdatum": {
+                "type": "text",
+                "analyzer": "nl_exact",
+                "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#beginperiode": {
+                "type": "text",
+                "analyzer": "nl_exact",
+                "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#eindperiode": {
+                "type": "text",
+                "analyzer": "nl_exact",
+                "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
+              },
+
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#zoonr": {
+                "type": "text",
+                "analyzer": "nl_exact",
+                "fields": {
+                  "keyword": { "type": "keyword", "ignore_above": 256 },
+                  "getal": { "type": "long", "ignore_malformed": true }
+                }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#waarnemingsnummer": {
+                "type": "text",
+                "analyzer": "nl_exact",
+                "fields": {
+                  "keyword": { "type": "keyword", "ignore_above": 256 },
+                  "getal": { "type": "long", "ignore_malformed": true }
+                }
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#vondstmeldingsnummer": {
+                "type": "text",
+                "analyzer": "nl_exact",
+                "fields": {
+                  "keyword": { "type": "keyword", "ignore_above": 256 },
+                  "getal": { "type": "long", "ignore_malformed": true }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "boneinfo-elastic-typen",
+        "template": {
+          "mappings": {
+            "properties": {
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#beginjaar": {
+                "type": "integer",
+                "ignore_malformed": true
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#eindjaar": {
+                "type": "integer",
+                "ignore_malformed": true
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#vondstjaar": {
+                "type": "integer",
+                "ignore_malformed": true
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#publicatiejaar": {
+                "type": "integer",
+                "ignore_malformed": true
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#gewogen": {
+                "type": "boolean"
+              },
+              "https://linkeddata cultureelerfgoed nl/def/boneinfo-elastic#taxonUri": {
+                "type": "keyword",
+                "ignore_above": 1024
+              },
+              "http://www opengis net/ont/geosparql#asWKT": {
+                "type": "geo_point",
+                "ignore_malformed": true
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}
