@@ -2,6 +2,7 @@ import { search, searchAll, findByZoonr, facets, fields, hitSource, jaarTekst, P
 import { parsePoint, centroidLatLon } from './geo.js';
 import { fetchDetail, fetchCollectionStats } from './detail.js';
 import { fetchGerelateerdErfgoed } from './related.js';
+import { t, getLang, setLang, LANGS, DEFAULT_LANG } from './i18n.js';
 
 // De brondatabase heeft voor "diergroep" alleen Engelstalige categorieën
 // (geen Nederlandse variant bestaat in BoneInfo zelf). Vertaling is alleen
@@ -40,7 +41,10 @@ const DIERGROEP_NL = {
 };
 
 function facetLabel(key, value) {
-  if (key === 'diergroep') return DIERGROEP_NL[value] || value;
+  // De brondata heeft geen Engelse diergroep-variant nodig: de bronwaarden
+  // zijn zelf al Engels. In NL-modus vertalen we ze; in EN-modus tonen we
+  // de brontekst ongewijzigd.
+  if (key === 'diergroep') return getLang() === 'nl' ? DIERGROEP_NL[value] || value : value;
   return value;
 }
 
@@ -64,6 +68,7 @@ const state = {
 let map = null;
 let markerLayer = null;
 let lastResponse = null;
+let currentHit = null; // laatst geopende detailkaart, voor her-renderen bij taalwissel
 
 function initMap() {
   if (!window.L) return null;
@@ -109,8 +114,12 @@ function renderMap(aggs) {
     const totaal = lastResponse?.hits?.total?.value ?? 0;
     const opKaart = buckets.reduce((sum, b) => sum + b.doc_count, 0);
     const zonderCoordinaten = Math.max(0, totaal - opKaart);
-    const bits = [`${plotted} locatie${plotted === 1 ? '' : 's'} op de kaart`, `${totaal} cluster${totaal === 1 ? '' : 's'} totaal`];
-    if (zonderCoordinaten > 0) bits.push(`${zonderCoordinaten} zonder coördinaten`);
+    const nl = getLang() === 'nl';
+    const bits = [
+      nl ? `${plotted} locatie${plotted === 1 ? '' : 's'} op de kaart` : `${plotted} location${plotted === 1 ? '' : 's'} on the map`,
+      nl ? `${totaal} cluster${totaal === 1 ? '' : 's'} totaal` : `${totaal} cluster${totaal === 1 ? '' : 's'} total`,
+    ];
+    if (zonderCoordinaten > 0) bits.push(nl ? `${zonderCoordinaten} zonder coördinaten` : `${zonderCoordinaten} without coordinates`);
     statusEl.textContent = bits.join(', ') + '.';
   }
 }
@@ -129,7 +138,7 @@ function renderFacets(aggs) {
     const buckets = aggs?.[key]?.values?.buckets ?? [];
     const active = new Set(state.filters[key] || []);
     if (!buckets.length) {
-      box.appendChild(el('p', 'facet-empty', 'Geen resultaten'));
+      box.appendChild(el('p', 'facet-empty', getLang() === 'nl' ? 'Geen resultaten' : 'No results'));
       continue;
     }
     for (const b of buckets) {
@@ -159,7 +168,7 @@ function clusterTitle(src) {
   const toponiem = src.one(fields.locatienaam);
   const plaats = src.one(fields.plaats);
   const complextype = src.one(fields.complextype);
-  const plek = toponiem || plaats || 'Onbekende locatie';
+  const plek = toponiem || plaats || t('unknownLocation');
   return complextype ? `${plek} — ${complextype}` : plek;
 }
 
@@ -168,7 +177,7 @@ function renderResults(data) {
   list.innerHTML = '';
   const hits = data.hits.hits;
   if (!hits.length) {
-    list.appendChild(el('p', 'empty', 'Geen clusters gevonden met deze zoekopdracht.'));
+    list.appendChild(el('p', 'empty', t('resultsEmpty')));
     return;
   }
   for (const hit of hits) {
@@ -186,7 +195,7 @@ function renderResults(data) {
     const eindjaar = src.one(fields.eindjaar);
     if (beginjaar != null || eindjaar != null) {
       const periode = src.one(fields.beginperiode) || src.one(fields.eindperiode);
-      const jaren = [jaarTekst(beginjaar), jaarTekst(eindjaar)].filter(Boolean);
+      const jaren = [jaarTekst(beginjaar, t('bc'), t('ad')), jaarTekst(eindjaar, t('bc'), t('ad'))].filter(Boolean);
       bits.push(periode ? `${periode}${jaren.length ? ` (${jaren.join(' – ')})` : ''}` : jaren.join(' – '));
     }
     meta.textContent = bits.join(' · ');
@@ -194,7 +203,8 @@ function renderResults(data) {
 
     const soorten = src.many(fields.diersoort);
     if (soorten.length) {
-      card.appendChild(el('p', 'species', `Diersoorten: ${soorten.slice(0, 6).join(', ')}${soorten.length > 6 ? ', …' : ''}`));
+      const label = getLang() === 'nl' ? 'Diersoorten' : 'Species';
+      card.appendChild(el('p', 'species', `${label}: ${soorten.slice(0, 6).join(', ')}${soorten.length > 6 ? ', …' : ''}`));
     }
 
     const omschrijving = src.one(fields.omschrijving);
@@ -216,7 +226,7 @@ function renderResults(data) {
   }
 
   const total = data.hits.total.value;
-  qs('#result-count').textContent = `${total} cluster${total === 1 ? '' : 's'} gevonden`;
+  qs('#result-count').textContent = t('resultCount', total);
   renderPager(total);
 }
 
@@ -225,24 +235,27 @@ function renderPager(total) {
   pager.innerHTML = '';
   const pages = Math.ceil(total / PAGE_SIZE);
   if (pages <= 1) return;
-  const prev = el('button', 'page-btn', '← Vorige');
+  const prev = el('button', 'page-btn', t('pagerPrev'));
+  prev.type = 'button';
   prev.disabled = state.page === 0;
   prev.addEventListener('click', () => {
     state.page = Math.max(0, state.page - 1);
     run();
   });
-  const next = el('button', 'page-btn', 'Volgende →');
+  const next = el('button', 'page-btn', t('pagerNext'));
+  next.type = 'button';
   next.disabled = state.page >= pages - 1;
   next.addEventListener('click', () => {
     state.page = Math.min(pages - 1, state.page + 1);
     run();
   });
   pager.appendChild(prev);
-  pager.appendChild(el('span', 'page-status', `Pagina ${state.page + 1} van ${pages}`));
+  pager.appendChild(el('span', 'page-status', t('pagerStatus', state.page + 1, pages)));
   pager.appendChild(next);
 }
 
 async function openDetail(hit) {
+  currentHit = hit;
   const src = hitSource(hit);
   const panel = qs('#detail-panel');
   panel.hidden = false;
@@ -267,33 +280,34 @@ async function openDetail(hit) {
       return;
     }
     copyPromise.then(
-      () => flash('Link gekopieerd ✓'),
+      () => flash(t('detailCopied')),
       () => showManualCopyLink(location.href) // clipboard-permissie geweigerd: handmatig kopiëren aanbieden
     );
   };
-  qs('#detail-body', panel).innerHTML = '<p class="loading">Bezig met laden…</p>';
+  qs('#detail-body', panel).innerHTML = `<p class="loading">${t('statusLoading')}</p>`;
   document.body.classList.add('detail-open');
 
+  const L = t('detailLabels');
   const rows = [
-    ['Clusternummer', src.one(fields.zoonr)],
-    ['Waarnemingsnummer', src.one(fields.waarnemingsnummer)],
-    ['Onderzoeksmeldingsnummer', src.one(fields.vondstmeldingsnummer)],
-    ['Toponiem', src.one(fields.locatienaam)],
-    ['Plaats', src.one(fields.plaats)],
-    ['Gemeente', src.one(fields.gemeente)],
-    ['Provincie', src.one(fields.provincie)],
-    ['Complextype', src.one(fields.complextype)],
-    ['Periode', [src.one(fields.beginperiode), src.one(fields.eindperiode)].filter((v, i, a) => v && a.indexOf(v) === i).join(' – ')],
-    ['Jaren', [jaarTekst(src.one(fields.beginjaar)), jaarTekst(src.one(fields.eindjaar))].filter(Boolean).join(' – ')],
-    ['Opdrachtgever', src.one(fields.opdrachtgever)],
-    ['Onderzoeksinstantie', src.one(fields.onderzoeksinstantie)],
-    ['Onderzoeker', src.one(fields.onderzoeker)],
-    ['Verzamelwijze', src.one(fields.verzamelwijze)],
-    ['Vondstverwerving', src.one(fields.vondstverwerving)],
-    ['Omvang', src.one(fields.omvang)],
-    ['Gewogen', src.one(fields.gewogen) === 'true' ? 'Ja' : src.one(fields.gewogen) === 'false' ? 'Nee' : null],
-    ['Vondstdatum', src.one(fields.vondstdatum)],
-    ['Invoerder', src.one(fields.invoerder)],
+    [L.clusternummer, src.one(fields.zoonr)],
+    [L.waarnemingsnummer, src.one(fields.waarnemingsnummer)],
+    [L.meldingsnummer, src.one(fields.vondstmeldingsnummer)],
+    [L.toponiem, src.one(fields.locatienaam)],
+    [L.plaats, src.one(fields.plaats)],
+    [L.gemeente, src.one(fields.gemeente)],
+    [L.provincie, src.one(fields.provincie)],
+    [L.complextype, src.one(fields.complextype)],
+    [L.periode, [src.one(fields.beginperiode), src.one(fields.eindperiode)].filter((v, i, a) => v && a.indexOf(v) === i).join(' – ')],
+    [L.jaren, [jaarTekst(src.one(fields.beginjaar), t('bc'), t('ad')), jaarTekst(src.one(fields.eindjaar), t('bc'), t('ad'))].filter(Boolean).join(' – ')],
+    [L.opdrachtgever, src.one(fields.opdrachtgever)],
+    [L.onderzoeksinstantie, src.one(fields.onderzoeksinstantie)],
+    [L.onderzoeker, src.one(fields.onderzoeker)],
+    [L.verzamelwijze, src.one(fields.verzamelwijze)],
+    [L.vondstverwerving, src.one(fields.vondstverwerving)],
+    [L.omvang, src.one(fields.omvang)],
+    [L.gewogen, src.one(fields.gewogen) === 'true' ? t('yes') : src.one(fields.gewogen) === 'false' ? t('no') : null],
+    [L.vondstdatum, src.one(fields.vondstdatum)],
+    [L.invoerder, src.one(fields.invoerder)],
   ].filter(([, v]) => v);
 
   const body = el('div');
@@ -306,7 +320,7 @@ async function openDetail(hit) {
 
   const omschrijving = src.one(fields.omschrijving);
   if (omschrijving) {
-    body.appendChild(el('h3', null, 'Beschrijving'));
+    body.appendChild(el('h3', null, t('headingDescription')));
     body.appendChild(el('p', 'description', omschrijving));
   }
 
@@ -314,17 +328,17 @@ async function openDetail(hit) {
   const vondstmeldingsnummer = src.one(fields.vondstmeldingsnummer);
   let erfgoedBox = null;
   if (waarnemingsnummer || vondstmeldingsnummer) {
-    body.appendChild(el('h3', null, 'Gerelateerd erfgoed (RCE)'));
-    erfgoedBox = el('div', 'loading', 'Bezig met opzoeken…');
+    body.appendChild(el('h3', null, t('headingRelated')));
+    erfgoedBox = el('div', 'loading', t('statusLooking'));
     body.appendChild(erfgoedBox);
   }
 
-  body.appendChild(el('h3', null, 'Diersoorten'));
-  const soortenBox = el('div', 'loading', 'Bezig met laden…');
+  body.appendChild(el('h3', null, t('headingSpecies')));
+  const soortenBox = el('div', 'loading', t('statusLoading'));
   body.appendChild(soortenBox);
 
-  body.appendChild(el('h3', null, 'Literatuur'));
-  const litBox = el('div', 'loading', 'Bezig met laden…');
+  body.appendChild(el('h3', null, t('headingLiterature')));
+  const litBox = el('div', 'loading', t('statusLoading'));
   body.appendChild(litBox);
 
   qs('#detail-body', panel).innerHTML = '';
@@ -336,7 +350,7 @@ async function openDetail(hit) {
     renderLiteratuurList(litBox, literatuur);
   } catch (e) {
     soortenBox.className = 'error';
-    soortenBox.textContent = 'Kon diersoorten/literatuur niet laden: ' + e.message;
+    soortenBox.textContent = t('speciesLoadError') + e.message;
     litBox.remove();
   } finally {
     panel.removeAttribute('aria-busy');
@@ -348,7 +362,7 @@ async function openDetail(hit) {
       renderGerelateerdErfgoed(erfgoedBox, gerelateerd);
     } catch (e) {
       erfgoedBox.className = 'error';
-      erfgoedBox.textContent = 'Kon het erfgoedregister niet bevragen: ' + e.message;
+      erfgoedBox.textContent = t('relatedError') + e.message;
     }
   }
 }
@@ -357,18 +371,10 @@ function renderGerelateerdErfgoed(box, items) {
   box.className = '';
   box.innerHTML = '';
   if (!items.length) {
-    box.appendChild(
-      el('p', 'empty', 'Geen match gevonden in de RCE-erfgoeddata op dit waarnemings-/meldingsnummer.')
-    );
+    box.appendChild(el('p', 'empty', t('relatedNone')));
     return;
   }
-  box.appendChild(
-    el(
-      'p',
-      'hint',
-      'Gevonden op gelijk waarnemings- of meldingsnummer — geen bevestigde identiteitskoppeling, maar een sterke aanwijzing voor hetzelfde onderzoek.'
-    )
-  );
+  box.appendChild(el('p', 'hint', t('relatedHint')));
   const ul = el('ul', 'related-list');
   for (const item of items) {
     const li = el('li');
@@ -380,7 +386,7 @@ function renderGerelateerdErfgoed(box, items) {
     a.textContent = `${item.klasseLabel}${bits.length ? ': ' + bits.join(', ') : ''}`;
     li.appendChild(a);
     if (item.aantalObjecten > 0) {
-      li.appendChild(el('span', 'ref-sub', ` · bevat ${item.aantalObjecten} gekoppelde objecten in het CHO-register`));
+      li.appendChild(el('span', 'ref-sub', t('relatedContains', item.aantalObjecten)));
     }
     if (item.zoekdemoUrl) {
       const raw = document.createElement('a');
@@ -388,7 +394,7 @@ function renderGerelateerdErfgoed(box, items) {
       raw.target = '_blank';
       raw.rel = 'noopener';
       raw.className = 'ref-sub-link';
-      raw.textContent = 'Linked Data (CHO)';
+      raw.textContent = t('relatedRawLink');
       li.appendChild(document.createTextNode(' · '));
       li.appendChild(raw);
     }
@@ -401,40 +407,52 @@ function renderSoortenTable(box, soorten) {
   box.className = '';
   box.innerHTML = '';
   if (!soorten.length) {
-    box.appendChild(el('p', 'empty', 'Geen soortvermeldingen.'));
+    box.appendChild(el('p', 'empty', t('speciesEmpty')));
     return;
   }
+  const en = getLang() === 'en';
   const table = el('table', 'detail-table');
   const thead = el('thead');
-  thead.innerHTML = '<tr><th>Naam</th><th>Wetenschappelijke naam</th><th>Opmerking</th><th></th></tr>';
+  const trh = el('tr');
+  trh.appendChild(el('th', null, t('thName')));
+  trh.appendChild(el('th', null, t('thScientific')));
+  trh.appendChild(el('th', null, t('thNote')));
+  trh.appendChild(el('th'));
+  thead.appendChild(trh);
   table.appendChild(thead);
   const tbody = el('tbody');
   for (const s of soorten) {
     const tr = el('tr');
-    const naamTd = el('td', null, s.naam || s.naamEn || '—');
-    if (!s.naam && s.naamEn) naamTd.appendChild(el('span', 'tag-en', ' (EN)'));
+    // Primaire naam volgt de sitetaal; is die er niet, dan de andere taal
+    // met een label erbij (data komt uit dwc:vernacularName@nl/@en).
+    const primary = en ? s.naamEn || s.naam : s.naam || s.naamEn;
+    const primaryIsOther = en ? !s.naamEn && !!s.naam : !s.naam && !!s.naamEn;
+    const naamTd = el('td', null, primary || '—');
+    if (primaryIsOther) naamTd.appendChild(el('span', 'tag-en', en ? ' (NL)' : ' (EN)'));
     tr.appendChild(naamTd);
     const sci = el('td');
     sci.appendChild(el('em', null, s.wetenschappelijk || '—'));
     tr.appendChild(sci);
     tr.appendChild(el('td', null, s.opmerking || '—'));
 
+    const otherNaam = en ? s.naam : s.naamEn;
+    const otherLabel = en ? t('taxDutchName') : t('taxEnglishName');
     const taxonomie = [
-      ['Rang', s.rang],
-      ['Autoriteit', s.authorship],
-      ['Rijk', s.kingdom],
-      ['Stam', s.phylum],
-      ['Klasse', s.klasse],
-      ['Orde', s.orde],
-      ['Familie', s.familie],
-      ['Geslacht', s.genus],
-      ['Engelse naam', s.naamEn],
-      ['Taxon-ID', s.taxonUri ? s.taxonUri.split('/').pop() : null],
+      [t('taxRang'), s.rang],
+      [t('taxAuthorship'), s.authorship],
+      [t('taxKingdom'), s.kingdom],
+      [t('taxPhylum'), s.phylum],
+      [t('taxClass'), s.klasse],
+      [t('taxOrder'), s.orde],
+      [t('taxFamily'), s.familie],
+      [t('taxGenus'), s.genus],
+      [otherLabel, otherNaam],
+      [t('taxId'), s.taxonUri ? s.taxonUri.split('/').pop() : null],
     ].filter(([, v]) => v);
 
     const toggleTd = el('td');
     if (taxonomie.length) {
-      const toggle = el('button', 'tax-toggle', '▸ Taxonomie en namen');
+      const toggle = el('button', 'tax-toggle', `▸ ${t('taxonomyToggle')}`);
       toggle.type = 'button';
       const taxRow = el('tr', 'tax-row');
       taxRow.hidden = true;
@@ -449,7 +467,7 @@ function renderSoortenTable(box, soorten) {
       taxRow.appendChild(taxTd);
       toggle.addEventListener('click', () => {
         taxRow.hidden = !taxRow.hidden;
-        toggle.textContent = (taxRow.hidden ? '▸' : '▾') + ' Taxonomie en namen';
+        toggle.textContent = `${taxRow.hidden ? '▸' : '▾'} ${t('taxonomyToggle')}`;
       });
       toggleTd.appendChild(toggle);
       tbody.appendChild(tr);
@@ -467,7 +485,7 @@ function renderLiteratuurList(box, literatuur) {
   box.className = '';
   box.innerHTML = '';
   if (!literatuur.length) {
-    box.appendChild(el('p', 'empty', 'Geen literatuurverwijzingen.'));
+    box.appendChild(el('p', 'empty', t('literatureEmpty')));
     return;
   }
   const ol = el('ol', 'literature-list');
@@ -493,13 +511,16 @@ function showManualCopyLink(url) {
   if (!box) {
     box = el('div', 'manual-copy');
     box.id = 'manual-copy-box';
+    const label = el('span', null, null);
+    label.dataset.role = 'manual-copy-label';
     const input = document.createElement('input');
     input.type = 'text';
     input.readOnly = true;
-    box.appendChild(el('span', null, 'Kopiëren lukte niet automatisch — selecteer en kopieer handmatig:'));
+    box.appendChild(label);
     box.appendChild(input);
     qs('#detail-copy-link').insertAdjacentElement('afterend', box);
   }
+  qs('[data-role="manual-copy-label"]', box).textContent = t('detailCopyFailed');
   const input = qs('input', box);
   input.value = url;
   box.hidden = false;
@@ -508,6 +529,7 @@ function showManualCopyLink(url) {
 }
 
 function closeDetail() {
+  currentHit = null;
   qs('#detail-panel').hidden = true;
   document.body.classList.remove('detail-open');
   const manualCopy = qs('#manual-copy-box');
@@ -522,8 +544,9 @@ function closeDetail() {
 async function loadCollectionStats() {
   try {
     const { soorten, literatuur } = await fetchCollectionStats();
-    qs('[data-stat="soorten"]').textContent = soorten.toLocaleString('nl-NL');
-    qs('[data-stat="literatuur"]').textContent = literatuur.toLocaleString('nl-NL');
+    const locale = getLang() === 'nl' ? 'nl-NL' : 'en-GB';
+    qs('[data-stat="soorten"]').textContent = soorten.toLocaleString(locale);
+    qs('[data-stat="literatuur"]').textContent = literatuur.toLocaleString(locale);
   } catch (e) {
     qs('[data-stat="soorten"]').textContent = '—';
     qs('[data-stat="literatuur"]').textContent = '—';
@@ -555,7 +578,7 @@ async function downloadCsv() {
   const btn = qs('#download-csv');
   const origText = btn.textContent;
   btn.disabled = true;
-  btn.textContent = 'Bezig…';
+  btn.textContent = getLang() === 'nl' ? 'Bezig…' : 'Working…';
   try {
     const hits = await searchAll(state);
     const header = [
@@ -580,7 +603,7 @@ async function downloadCsv() {
     }
     downloadBlob('boneinfo-clusters.csv', lines.join('\r\n'), 'text/csv;charset=utf-8');
   } catch (e) {
-    alert('CSV-export mislukt: ' + e.message);
+    alert(t('csvFailed') + e.message);
   } finally {
     btn.disabled = false;
     btn.textContent = origText;
@@ -660,7 +683,7 @@ let runToken = 0;
 async function run() {
   const token = ++runToken;
   const status = qs('#status');
-  status.textContent = 'Bezig met zoeken…';
+  status.textContent = t('statusSearching');
   status.className = 'status';
   try {
     const data = await search(state);
@@ -671,11 +694,11 @@ async function run() {
     renderFacets(data.aggregations);
     renderMap(data.aggregations);
     if (isUnfiltered()) {
-      qs('[data-stat="clusters"]').textContent = data.hits.total.value.toLocaleString('nl-NL');
+      qs('[data-stat="clusters"]').textContent = data.hits.total.value.toLocaleString(getLang() === 'nl' ? 'nl-NL' : 'en-GB');
     }
   } catch (e) {
     if (token !== runToken) return;
-    status.textContent = e.message || 'Er ging iets mis.';
+    status.textContent = e.message || t('errUnknown');
     status.className = 'status error';
   }
 }
@@ -713,6 +736,56 @@ function wireUp() {
   for (const sel of liveInputs) {
     qs(sel).addEventListener('input', applyFilters);
   }
+
+  qs('#lang-nl').addEventListener('click', () => switchLanguage('nl'));
+  qs('#lang-en').addEventListener('click', () => switchLanguage('en'));
+}
+
+// Vult alle [data-i18n]/[data-i18n-placeholder]-elementen met de teksten
+// van de actieve taal. Dekt de vaste schermteksten; dynamisch gegenereerde
+// teksten (resultaten, facetten, detailpaneel) gebruiken t() rechtstreeks
+// en worden apart herladen door switchLanguage().
+function applyStaticTranslations() {
+  for (const node of qsa('[data-i18n]')) node.textContent = t(node.dataset.i18n);
+  for (const node of qsa('[data-i18n-placeholder]')) node.placeholder = t(node.dataset.i18nPlaceholder);
+  document.documentElement.lang = getLang();
+  document.title = t('pageTitle');
+}
+
+function switchLanguage(lang) {
+  if (lang === getLang()) return;
+  setLang(lang);
+  try {
+    localStorage.setItem('boneinfo-lang', lang);
+  } catch (e) {
+    /* privénavigatie o.i.d.: taalvoorkeur onthouden is dan niet mogelijk, geen probleem */
+  }
+  const url = new URL(location.href);
+  url.searchParams.set('lang', lang);
+  history.replaceState(null, '', url.pathname + url.search);
+
+  qs('#lang-nl').setAttribute('aria-pressed', String(lang === 'nl'));
+  qs('#lang-en').setAttribute('aria-pressed', String(lang === 'en'));
+  applyStaticTranslations();
+  loadCollectionStats();
+  run();
+  if (currentHit) openDetail(currentHit);
+}
+
+function initLanguage() {
+  const fromUrl = new URLSearchParams(location.search).get('lang');
+  let lang = fromUrl;
+  if (!lang) {
+    try {
+      lang = localStorage.getItem('boneinfo-lang');
+    } catch (e) {
+      /* geen toegang tot localStorage: gewoon de standaardtaal gebruiken */
+    }
+  }
+  setLang(LANGS.includes(lang) ? lang : DEFAULT_LANG);
+  qs('#lang-nl').setAttribute('aria-pressed', String(getLang() === 'nl'));
+  qs('#lang-en').setAttribute('aria-pressed', String(getLang() === 'en'));
+  applyStaticTranslations();
 }
 
 function debounce(fn, delay) {
@@ -725,6 +798,7 @@ function debounce(fn, delay) {
 
 map = initMap();
 wireUp();
+initLanguage();
 syncFormFromState();
 loadCollectionStats();
 run();

@@ -1,6 +1,8 @@
 // Querybuilder en Elasticsearch-client voor BoneInfo. Geen DOM-afhankelijkheden,
 // zodat dit los te testen is (zie tests/).
 
+import { t } from './i18n.js';
+
 export const ES_ENDPOINT =
   'https://api.linkeddata.cultureelerfgoed.nl/datasets/archeozoologie/boneinfo-elastic/services/Boneinfo/_search';
 
@@ -213,7 +215,7 @@ async function runEsQuery(body) {
       body: JSON.stringify(body),
     });
   } catch (e) {
-    throw new Error('Kan de zoekservice niet bereiken. Probeer het later opnieuw.');
+    throw new Error(t('errFetch'));
   }
   if (!res.ok) {
     let detail = '';
@@ -222,8 +224,8 @@ async function runEsQuery(body) {
     } catch (_) {
       /* ignore */
     }
-    if (res.status === 503) throw new Error('De zoekservice is tijdelijk niet beschikbaar.');
-    throw new Error(`Zoekopdracht mislukt (${res.status}). ${detail}`.trim());
+    if (res.status === 503) throw new Error(t('errUnavailable'));
+    throw new Error(`${t('errGeneric', res.status)} ${detail}`.trim());
   }
   return res.json();
 }
@@ -254,8 +256,10 @@ export function hitSource(hit) {
 }
 
 // Jaartal-weergave: BC-jaren zijn gewone negatieve integers in de index.
-export function jaarTekst(jaar) {
+// bc/ad zijn taalafhankelijke suffixen (bv. "v.Chr."/"n.Chr." of "BC"/"AD"),
+// door de aanroeper meegegeven (zie web/i18n.js) zodat dit module taalloos blijft.
+export function jaarTekst(jaar, bc = 'v.Chr.', ad = 'n.Chr.') {
   if (jaar == null) return null;
   const n = Number(jaar);
-  return n < 0 ? `${-n} v.Chr.` : `${n} n.Chr.`;
+  return n < 0 ? `${-n} ${bc}` : `${n} ${ad}`;
 }

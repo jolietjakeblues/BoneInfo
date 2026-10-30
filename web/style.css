@@ -31,8 +31,25 @@ body {
   background: #fff;
   border-bottom: 4px solid var(--geel);
   padding: 20px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 .brand { display: flex; align-items: center; gap: 14px; }
+.lang-toggle { display: flex; border: 1px solid var(--grijs-3); border-radius: 6px; overflow: hidden; }
+.lang-btn {
+  padding: 6px 14px;
+  background: #fff;
+  border: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--grijs-4);
+  cursor: pointer;
+}
+.lang-btn + .lang-btn { border-left: 1px solid var(--grijs-3); }
+.lang-btn[aria-pressed="true"] { background: var(--blauw-1); color: #fff; }
 .brand-mark {
   background: var(--blauw-1);
   color: #fff;
