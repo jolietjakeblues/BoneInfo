@@ -38,9 +38,8 @@ BoneInfo-veld wordt welk RDF-predicaat, en waarom).
 
 ## Ontologieën/vocabulaires
 
-Geen nieuwe ontologie gedefinieerd — uitsluitend bestaande vocabulaires
-hergebruikt, met een handvol kleine aanvullende properties waar niets
-passends bestond (zie [MAPPING.md](MAPPING.md), sectie "Open punten"):
+Vrijwel uitsluitend bestaande vocabulaires hergebruikt, met een klein
+aantal aanvullende `bo:`-properties waar niets passends bestond:
 
 | Vocabulaire | Gebruikt voor |
 |---|---|
@@ -49,6 +48,13 @@ passends bestond (zie [MAPPING.md](MAPPING.md), sectie "Open punten"):
 | [Darwin Core](http://rs.tdwg.org/dwc/terms/) | Diersoorten (`dwc:Taxon`), vondst-registraties (`dwc:Occurrence`) |
 | [schema.org](https://schema.org/) | Publicaties en tijdschriften (CEO heeft geen bibliografisch model) |
 | [SKOS](http://www.w3.org/2004/02/skos/core#) | Lokaal periode-vocabulaire, koppeling naar het Nederlands Soortenregister |
+| `bo:` (dit project) | ~20 kleine aanvullende properties, zie [`ontology/boneinfo.ttl`](ontology/boneinfo.ttl) |
+
+De 20 `bo:`-properties zijn formeel gedefinieerd (labels NL/EN, beschrijving,
+domain/range, voorbeeld per term) in
+[`ontology/boneinfo.ttl`](ontology/boneinfo.ttl). Voor de motivatie per
+keuze — waarom bijvoorbeeld `bo:vondstverwerving` en niet `ceo:heeftVerwerving`
+— zie [MAPPING.md](MAPPING.md), sectie "Open punten".
 
 Namespace voor nieuwe resources: `https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/`.
 
@@ -123,6 +129,7 @@ onderzoek"):
 | [`construct/boneinfo.rq`](construct/boneinfo.rq) | CONSTRUCT-query: brondataset → platte zoekprojectie |
 | [`triply/elastic-service.json`](triply/elastic-service.json) | Index-/component-templates voor de Elasticsearch-service |
 | [`web/`](web/) | De zoeksite |
+| [`ontology/boneinfo.ttl`](ontology/boneinfo.ttl) | Formele OWL/RDFS-vocabulaire (Turtle) van de zelf-gemunte `bo:`-properties: labels, beschrijvingen en voorbeelden per term — zie onderstaande sectie |
 | [`MAPPING.md`](MAPPING.md) | Volledige ontologie-mapping, veld voor veld, met motivatie en open punten |
 | `BoneInfo User Manual V01 10 (English).doc`, `Handleiding BoneInfo V01.10.doc` | Originele BoneInfo-documentatie (RCE) |
 
