@@ -149,7 +149,19 @@
       <section class="map-panel" aria-label="Kaart">
         <div class="map-head">
           <h2 data-i18n="mapTitle">Waar is het materiaal gevonden?</h2>
-          <button type="button" id="download-geojson" class="ghost-btn" data-i18n="downloadGeoJson">GeoJSON ↓</button>
+          <div class="map-actions">
+            <label class="sort-label">
+              <span data-i18n="mapResolutionLabel">Raster</span>
+              <select id="map-resolution">
+                <option value="locaties" data-i18n="mapResolutionLocaties">Brongegevens</option>
+                <option value="1km" data-i18n="mapResolution1km">1 × 1 km</option>
+                <option value="5km" data-i18n="mapResolution5km">5 × 5 km</option>
+                <option value="10km" data-i18n="mapResolution10km">10 × 10 km</option>
+                <option value="25km" data-i18n="mapResolution25km">25 × 25 km</option>
+              </select>
+            </label>
+            <button type="button" id="download-geojson" class="ghost-btn" data-i18n="downloadGeoJson">GeoJSON ↓</button>
+          </div>
         </div>
         <p id="map-status" class="map-status"></p>
         <div id="map"></div>
@@ -161,7 +173,7 @@
           <li><span class="dot c5"></span> 26–50</li>
           <li><span class="dot c6"></span> 51+</li>
         </ul>
-        <p class="hint" data-i18n="mapLegendHint">Cirkels groeperen clusters op (vrijwel) dezelfde brongeometrie. Klik om in te zoomen.</p>
+        <p class="hint" data-i18n="mapLegendHint">Cirkels groeperen clusters op (vrijwel) dezelfde brongeometrie, of (bij een gekozen raster) binnen dezelfde rastercel. Klik om in te zoomen. Een grotere rastercel toont minder, grotere cirkels — dat is een weergavekeuze, geen locatienauwkeurigheid.</p>
       </section>
     </div>
   </main>

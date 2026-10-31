@@ -584,6 +584,14 @@
         schema:isPartOf <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/periodiek/89> ;
         schema:name "Hengelo - Huis Hengelo 1995; half varken (middeleeuws), 1pp" .
 
+    cht:0bd089db-adf3-4246-8828-e64224e2324b skos:prefLabel "archeologisch: (veld)kartering"@nl .
+
+    cht:5e0fa4ad-82b0-4970-b43d-e0cdb6a97d73 skos:prefLabel "verwervingswijze onbepaald"@nl .
+
+    cht:64393867-4106-4bb1-8132-de74760e6531 skos:prefLabel "niet-archeologisch"@nl .
+
+    cht:d303201f-d9c5-44d7-a57c-b65644fed2aa skos:prefLabel "niet-archeologisch: graafwerk"@nl .
+
     <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/begindatering/15> a ceo:BeginDatering ;
         bo:jaar -1800 ;
         ceo:heeftPeriode <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/periode/BRONSM> .
@@ -5402,6 +5410,8 @@
         ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Horst" ;
         schema:description "Onderzoek aan de botresten uit de privaatvulling in de donjon (eind 16e eeuw) en een tweetal waterputten. Naast slachtvee en pluimvee is jachtwild aangetroffen. Het grove jachtwild ontbreekt echter. De belangrijkste vleesleveranciers zijn schapen en runderen. Varkens waren van minder belang. Uit het privaat kwam een geweifragment van een ree. Het fragment was sterk vervormd door een verwonding van het bastgewei."@nl .
+
+    cht:00714835-b307-4990-8f11-12b6d62bf1ba skos:prefLabel "archeologisch: opgraving"@nl .
 
     <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/cluster/23> a ceo:ArcheologischComplex,
             ceo:Vondstlocatie ;

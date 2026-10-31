@@ -62,7 +62,7 @@ Namespace voor nieuwe resources: `https://linkeddata.cultureelerfgoed.nl/archeoz
 
 | | |
 |---|---|
-| Brondataset | [`archeozoologie/boneinfo`](https://linkeddata.cultureelerfgoed.nl/archeozoologie/boneinfo) — 278.370 triples, named graph `.../archeozoologie/graph/boneinfo` |
+| Brondataset | [`archeozoologie/boneinfo`](https://linkeddata.cultureelerfgoed.nl/archeozoologie/boneinfo) — 278.386 triples, named graph `.../archeozoologie/graph/boneinfo` |
 | Zoekprojectie | [`archeozoologie/boneinfo-elastic`](https://linkeddata.cultureelerfgoed.nl/archeozoologie/boneinfo-elastic) — gegenereerd met [`construct/boneinfo.rq`](construct/boneinfo.rq), 2.434 platte documenten (één per cluster) |
 | Elasticsearch-service | `Boneinfo` op `archeozoologie/boneinfo-elastic`, template: [`triply/elastic-service.json`](triply/elastic-service.json) |
 
@@ -90,7 +90,10 @@ service (CORS staat daar open).
   code-commentaar voor waarom)
 - `web/related.js` — de kruislink naar RCE-erfgoeddata (zie hieronder)
 - `web/app.js`, `web/geo.js` — DOM/kaart-orkestratie (Leaflet, locatie-
-  clustering), WKT-parsing
+  clustering), WKT-parsing. Kaartresolutie is instelbaar: "Brongegevens"
+  (exacte brongeometrie, `geohash_grid`) of een regionaal raster van 1/5/
+  10/25 km (`geotile_grid`), zie `web/search.js` `MAP_RESOLUTIONS` — nuttig
+  om landelijk uitgezoomd niet 1.000+ losse bubbels te tonen.
 
 Lokaal draaien:
 

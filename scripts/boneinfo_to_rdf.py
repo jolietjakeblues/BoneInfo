@@ -29,7 +29,7 @@ from pyproj import Transformer
 from rdflib import Dataset, Namespace, URIRef, Literal, BNode
 from rdflib.namespace import RDF, RDFS, XSD, SKOS, OWL
 
-from crosswalk import CHT_RN2, VERWERVING_CROSSWALK, resolve_gemeente, resolve_provincie
+from crosswalk import CHT_RN2, VERWERVING_CROSSWALK, VERWERVING_LABELS, resolve_gemeente, resolve_provincie
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 IN_DIR = REPO_ROOT / "data" / "csv"
@@ -133,6 +133,10 @@ def main():
             used_period_codes.add(c["Begin_periode"])
         if nz(c["Eind_periode"]):
             used_period_codes.add(c["Eind_periode"])
+    used_verwerving_concepts = {
+        VERWERVING_CROSSWALK[v] for c in pilot_clusters
+        for v in [nz(c["Vondstverwerving"])] if v and v in VERWERVING_CROSSWALK
+    }
 
     ds = Dataset()
     ds.bind("bo", BO)
@@ -163,6 +167,14 @@ def main():
             g.add((uri, BO.beginjaar, Literal(bw, datatype=XSD.integer)))
         if ew is not None:
             g.add((uri, BO.eindjaar, Literal(ew, datatype=XSD.integer)))
+
+    # --- verwervingswijze-concepten: skos:prefLabel lokaal gecached (zie
+    # scripts/crosswalk.py), zodat construct/boneinfo.rq ceo:heeftVerwerving
+    # kan labelen zonder een federated query naar de externe RCE-thesaurus ---
+    for concept in used_verwerving_concepts:
+        label = VERWERVING_LABELS.get(concept)
+        if label:
+            g.add((CHT[concept], SKOS.prefLabel, Literal(label, lang="nl")))
 
     # --- periodicals ---
     for pid in used_periodiek_ids:
