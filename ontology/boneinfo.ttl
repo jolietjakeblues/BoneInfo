@@ -1,0 +1,270 @@
+@prefix bo:      <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix vann:    <http://purl.org/vocab/vann/> .
+@prefix ceo:     <https://linkeddata.cultureelerfgoed.nl/def/ceo#> .
+@prefix geo:     <http://www.opengis.net/ont/geosparql#> .
+@prefix dwc:     <http://rs.tdwg.org/dwc/terms/> .
+@prefix schema:  <https://schema.org/> .
+
+#################################################################
+# BoneInfo-vocabulaire
+#
+# Dit bestand definieert UITSLUITEND de properties die zelf gemunt zijn
+# voor de BoneInfo-dataset (archeozoölogische onderzoeksclusters van de
+# Rijksdienst voor het Cultureel Erfgoed), omdat er geen geschikte
+# bestaande property voor bestond. Het is bewust GEEN nieuwe, volledige
+# ontologie: BoneInfo hergebruikt zoveel mogelijk bestaande, externe
+# vocabulaires voor de klassen en de meeste properties. Zie de sectie
+# "Hergebruikte vocabulaires" hieronder en MAPPING.md in de hoofdmap van
+# de repository voor de volledige, beargumenteerde veld-voor-veld-mapping.
+#
+# Namespace: deze properties staan bewust in dezelfde namespace als de
+# BoneInfo-instanties zelf (.../archeozoologie/id/boneinfo/), niet in een
+# aparte .../def/boneinfo#-namespace zoals bij CEO gebruikelijk is. Dat is
+# een pragmatische keuze geweest bij het eerste ontwerp, geen principiële;
+# zie het open punt onderaan dit bestand.
+#################################################################
+
+<https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/>
+    a owl:Ontology ;
+    dcterms:title "BoneInfo-vocabulaire"@nl, "BoneInfo vocabulary"@en ;
+    dcterms:description """Kleine aanvullende vocabulaire voor de BoneInfo-dataset (archeozoölogische onderzoeksclusters, diersoorten en literatuur), gebruikt naast CEO, GeoSPARQL, Darwin Core, schema.org en SKOS. Bevat alleen properties waarvoor in die bestaande vocabulaires geen geschikte term bestond."""@nl ;
+    dcterms:description """Small supplementary vocabulary for the BoneInfo dataset (archaeozoological research clusters, animal species and literature), used alongside CEO, GeoSPARQL, Darwin Core, schema.org and SKOS. Contains only properties for which no suitable existing term was found."""@en ;
+    vann:preferredNamespacePrefix "bo" ;
+    vann:preferredNamespaceUri "https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/" ;
+    dcterms:source <https://github.com/jolietjakeblues/BoneInfo> ;
+    dcterms:publisher "Rijksdienst voor het Cultureel Erfgoed (RCE)"@nl ;
+    owl:versionInfo "1.0.0" ;
+    dcterms:created "2026-10-30"^^xsd:date ;
+    rdfs:comment """Hergebruikte vocabulaires (niet in dit bestand gedefinieerd, alleen gebruikt als rdfs:domain/rdfs:range of als klasse van een instantie):
+- CEO (ceo:) <https://linkeddata.cultureelerfgoed.nl/def/ceo#> — RCE Cultuurhistorische Erfgoed Ontologie: ceo:Vondstlocatie, ceo:ArcheologischComplex, ceo:Datering, ceo:BeginDatering, ceo:EindDatering, ceo:LocatieAanduiding, ceo:heeftGeometrie, ceo:heeftDatering, ceo:heeftBeginDatering, ceo:heeftEindDatering, ceo:heeftPeriode, ceo:heeftLocatieAanduiding, ceo:locatienaam, ceo:bevatObject, ceo:ligtInObject, ceo:archis2Waarnemingsnummer, ceo:archis2Vondstmeldingsnummer, ceo:Vondsten.
+- GeoSPARQL (geo:) <http://www.opengis.net/ont/geosparql#> — geo:Geometry, geo:asWKT (RD/EPSG:28992 geconverteerd naar WGS84).
+- Darwin Core (dwc:) <http://rs.tdwg.org/dwc/terms/> — dwc:Taxon, dwc:Occurrence, dwc:scientificName, dwc:vernacularName, dwc:taxonRank, dwc:scientificNameAuthorship, dwc:kingdom, dwc:phylum, dwc:class, dwc:order, dwc:family, dwc:genus.
+- schema.org (schema:) <https://schema.org/> — schema:ScholarlyArticle, schema:CreativeWork, schema:Periodical, schema:about, schema:name, schema:author, schema:datePublished, schema:isPartOf, schema:addressLocality, schema:description.
+- SKOS (skos:) <http://www.w3.org/2004/02/skos/core#> — skos:Concept, skos:ConceptScheme, skos:prefLabel, skos:inScheme, skos:exactMatch (naar het Nederlands Soortenregister).
+Zie MAPPING.md in de repository-hoofdmap voor het volledige veld-voor-veld-overzicht, inclusief de motivatie per keuze."""@nl .
+
+#################################################################
+# Lokaal SKOS-vocabulaire: archeologische periode-indeling
+#################################################################
+
+bo:periodeSchema
+    a skos:ConceptScheme ;
+    rdfs:label "BoneInfo archeologische periode-indeling"@nl, "BoneInfo archaeological period scheme"@en ;
+    rdfs:comment "SKOS-conceptschema voor de ~54 archeologische periodes uit de BoneInfo-brondatabase (tblPeriode), bijvoorbeeld 'Bronstijd midden: 1800 - 1100 vC'. Niet gekoppeld aan de CHT-thesaurus: er zijn geen periodeconcepten gevonden die hier 1-op-1 op aansluiten. Elk concept in dit schema heeft bo:beginjaar en bo:eindjaar."@nl ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:periode/BRONSM a skos:Concept ; skos:inScheme bo:periodeSchema ; skos:prefLabel \"Bronstijd midden: 1800 - 1100 vC\"@nl ; bo:beginjaar -1800 ; bo:eindjaar -1101 ."@nl .
+
+#################################################################
+# Properties op het cluster (ceo:Vondstlocatie / ceo:ArcheologischComplex)
+#################################################################
+
+bo:zoonr
+    a owl:DatatypeProperty ;
+    rdfs:label "zoönummer"@nl, "cluster number"@en ;
+    rdfs:comment "De interne primaire sleutel van een BoneInfo-cluster (bronveld Zoonr). Altijd aanwezig, in tegenstelling tot ceo:archis2Waarnemingsnummer/ceo:archis2Vondstmeldingsnummer die niet voor elk cluster zijn ingevuld."@nl ;
+    rdfs:domain ceo:Vondstlocatie ;
+    rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:cluster/15 bo:zoonr 15 ."@nl .
+
+bo:gemeente
+    a owl:DatatypeProperty ;
+    rdfs:label "gemeente"@nl, "municipality"@en ;
+    rdfs:comment "Gemeentenaam als platte tekststring uit de bron (bronveld Gemeente). Nog niet gekoppeld aan een OWMS-gemeenteconcept zoals in CEO's eigen data (ceo:heeftGemeente); zie MAPPING.md, open punt 2."@nl ;
+    rdfs:domain ceo:Vondstlocatie ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:cluster/15 bo:gemeente \"Heumen\" ."@nl .
+
+bo:provincie
+    a owl:DatatypeProperty ;
+    rdfs:label "provincie"@nl, "province"@en ;
+    rdfs:comment "Provincienaam als platte tekststring uit de bron (bronveld Provincie). Zelfde beperking als bo:gemeente: nog geen OWMS-koppeling."@nl ;
+    rdfs:domain ceo:Vondstlocatie ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:cluster/15 bo:provincie \"Gelderland\" ."@nl .
+
+bo:complextype
+    a owl:DatatypeProperty ;
+    rdfs:label "complextype"@nl, "complex type"@en ;
+    rdfs:comment "Vrije-tekst typering van het archeologisch complex uit de bron (bronveld Complextype), bijvoorbeeld 'Crematiegraf' of 'Nederzetting, onbepaald'. Niet gekoppeld aan een ABR- of CHT-thesaurusterm."@nl ;
+    rdfs:domain ceo:Vondstlocatie ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:cluster/15 bo:complextype \"Crematiegraf\" ."@nl .
+
+bo:vondstverwerving
+    a owl:DatatypeProperty ;
+    rdfs:label "vondstverwerving"@nl, "acquisition method"@en ;
+    rdfs:comment "Hoe de vondst is verworven, als vrije tekst (bronveld Vondstverwerving), bijvoorbeeld 'Archeologisch: opgraving'. CEO's eigen ceo:heeftVerwerving verwacht een skos:Concept uit de CHT-thesaurus, geen vrije tekst; BoneInfo's waarden zijn niet 1-op-1 op die thesaurus te matchen zonder een handmatige crosswalk-tabel (zie MAPPING.md, open punt 3), vandaar deze eigen literal-property."@nl ;
+    rdfs:domain ceo:Vondstlocatie ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:cluster/15 bo:vondstverwerving \"Archeologisch: opgraving\" ."@nl .
+
+bo:verzamelwijze
+    a owl:DatatypeProperty ;
+    rdfs:label "verzamelwijze"@nl, "collection method"@en ;
+    rdfs:comment "De wijze van verzamelen van het botmateriaal, als vrije tekst (bronveld Verzamelwijze), bijvoorbeeld 'hand collected, intensive + sieved, coarse'. Beschrijft onderzoeksmethode, niet een ABR/CHT-begrip."@nl ;
+    rdfs:domain ceo:Vondstlocatie ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:cluster/15 bo:verzamelwijze \"hand collected, intensive + sieved, coarse\" ."@nl .
+
+bo:omvang
+    a owl:DatatypeProperty ;
+    rdfs:label "omvang"@nl, "size"@en ;
+    rdfs:comment "Grootteklasse van het aangetroffen botmateriaal, als vrije tekst uit een beperkte bronlijst (bronveld Omvang: tblOmvang), bijvoorbeeld '1-10 bones', '11-100 bones' of 'unknown'."@nl ;
+    rdfs:domain ceo:Vondstlocatie ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:cluster/15 bo:omvang \"unknown\" ."@nl .
+
+bo:gewogen
+    a owl:DatatypeProperty ;
+    rdfs:label "gewogen"@nl, "weighed"@en ;
+    rdfs:comment "Of het botmateriaal is gewogen tijdens het onderzoek (bronveld Gewogen, Yes/No omgezet naar xsd:boolean)."@nl ;
+    rdfs:domain ceo:Vondstlocatie ;
+    rdfs:range xsd:boolean ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:cluster/15 bo:gewogen true ."@nl .
+
+bo:opdrachtgever
+    a owl:DatatypeProperty ;
+    rdfs:label "opdrachtgever"@nl, "client"@en ;
+    rdfs:comment "Naam van de opdrachtgever van het onderzoek (bronveld Opdrachtgever), als platte tekst, geen schema:Organization-resource (geen naamdisambiguatie uitgevoerd)."@nl ;
+    rdfs:domain ceo:Vondstlocatie ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:cluster/15 bo:opdrachtgever \"Archeologische Werkgemeenschap voor Nederland\" ."@nl .
+
+bo:onderzoeksinstantie
+    a owl:DatatypeProperty ;
+    rdfs:label "onderzoeksinstantie"@nl, "research institute"@en ;
+    rdfs:comment "Naam van de instantie die het archeozoölogisch onderzoek heeft uitgevoerd (bronveld Onderzoeksinstantie), als platte tekst."@nl ;
+    rdfs:domain ceo:Vondstlocatie ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:cluster/15 bo:onderzoeksinstantie \"Rijksdienst voor het Oudheidkundig Bodemonderzoek (ROB)\" ."@nl .
+
+bo:onderzoeker
+    a owl:DatatypeProperty ;
+    rdfs:label "onderzoeker"@nl, "researcher"@en ;
+    rdfs:comment "Naam (of namen) van de onderzoeker(s) die het botmateriaal heeft/hebben bestudeerd (bronveld Onderzoeker), als platte tekst — geen schema:Person-resource, geen naamdisambiguatie."@nl ;
+    rdfs:domain ceo:Vondstlocatie ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:cluster/15 bo:onderzoeker \"Cuijpers, A.G.F.; Amersfoort\" ."@nl .
+
+bo:invoerder
+    a owl:DatatypeProperty ;
+    rdfs:label "invoerder"@nl, "entered by"@en ;
+    rdfs:comment "Naam van degene die het cluster in de BoneInfo-database heeft ingevoerd (bronveld Invoerder), administratieve herkomstinformatie."@nl ;
+    rdfs:domain ceo:Vondstlocatie ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:cluster/15 bo:invoerder \"Vries de, L.S.\" ."@nl .
+
+bo:vondstdatum
+    a owl:DatatypeProperty ;
+    rdfs:label "vondstdatum"@nl, "find date"@en ;
+    rdfs:comment "De vondstdatum zoals in de bron genoteerd (bronveld Datum_vondst), als vrije tekst in plaats van xsd:date: het brondatumformaat is niet consistent genoeg voor een betrouwbare typeconversie (soms alleen een jaar, soms '00-00-JJJJ' als onvolledige datum)."@nl ;
+    rdfs:domain ceo:Vondstlocatie ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:cluster/15 bo:vondstdatum \"09-10-1994\" ."@nl .
+
+bo:vondstjaar
+    a owl:DatatypeProperty ;
+    rdfs:label "vondstjaar"@nl, "find year"@en ;
+    rdfs:comment "Het vondstjaar als geheel getal (afgeleid uit bronveld YYYYMMDD_datum_vondst), bruikbaar voor sortering/filtering waar bo:vondstdatum dat niet is."@nl ;
+    rdfs:domain ceo:Vondstlocatie ;
+    rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:cluster/15 bo:vondstjaar 1994 ."@nl .
+
+#################################################################
+# Datering en periode
+#################################################################
+
+bo:jaar
+    a owl:DatatypeProperty ;
+    rdfs:label "jaar"@nl, "year"@en ;
+    rdfs:comment "Jaartal (negatief = v.Chr.) op een ceo:BeginDatering- of ceo:EindDatering-knoop, afgeleid uit de bronvelden Beginjaar/Eindjaar. Geen rdfs:domain opgegeven omdat de property op twee verschillende, onderling disjuncte klassen voorkomt (BeginDatering én EindDatering); één gezamenlijke rdfs:domain zou dat onterecht als een AND i.p.v. een OR formaliseren."@nl ;
+    rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:begindatering/15 a ceo:BeginDatering ; ceo:heeftPeriode bo:periode/BRONSM ; bo:jaar -1800 ."@nl .
+
+bo:beginjaar
+    a owl:DatatypeProperty ;
+    rdfs:label "beginjaar"@nl, "start year"@en ;
+    rdfs:comment "Beginjaar van een archeologische periode in bo:periodeSchema (negatief = v.Chr.), afgeleid uit bronveld tblPeriode.beginwaarde. Niet te verwarren met bo:jaar, dat op het niveau van een individuele vondst-datering staat, niet op het niveau van een periodedefinitie."@nl ;
+    rdfs:domain skos:Concept ;
+    rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:periode/BRONSM skos:inScheme bo:periodeSchema ; bo:beginjaar -1800 ."@nl .
+
+bo:eindjaar
+    a owl:DatatypeProperty ;
+    rdfs:label "eindjaar"@nl, "end year"@en ;
+    rdfs:comment "Eindjaar van een archeologische periode in bo:periodeSchema (negatief = v.Chr.), afgeleid uit bronveld tblPeriode.eindwaarde."@nl ;
+    rdfs:domain skos:Concept ;
+    rdfs:range xsd:integer ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:periode/BRONSM skos:inScheme bo:periodeSchema ; bo:eindjaar -1101 ."@nl .
+
+#################################################################
+# Diersoorten (dwc:Taxon / dwc:Occurrence)
+#################################################################
+
+bo:heeftTaxon
+    a owl:ObjectProperty ;
+    rdfs:label "heeft taxon"@nl, "has taxon"@en ;
+    rdfs:comment "Koppelt een dwc:Occurrence (een soortvermelding binnen een cluster, ook getypeerd als ceo:Vondsten) aan het dwc:Taxon waarop die vermelding betrekking heeft. De enige object-property in dit vocabulaire: Darwin Core zelf definieert geen RDF-objectrelatie tussen Occurrence en Taxon (de DwC-termen zijn ontworpen voor platte Darwin Core Archives, niet voor een gelinkt-datamodel); zie MAPPING.md, open punt 5."@nl ;
+    rdfs:domain dwc:Occurrence ;
+    rdfs:range dwc:Taxon ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:occurrence/15_1 a dwc:Occurrence, ceo:Vondsten ; ceo:ligtInObject bo:cluster/15 ; bo:heeftTaxon bo:taxon/69 ."@nl .
+
+bo:taxongroep
+    a owl:DatatypeProperty ;
+    rdfs:label "diergroep"@nl, "animal group"@en ;
+    rdfs:comment "Hogere, informele diergroepering uit de bron (bronveld tblDiersoort.group, altijd Engelstalig in de bron zelf — geen Nederlandse variant beschikbaar), bijvoorbeeld 'domestic mammals' of 'wild 1: game (or wild/domestic)'. Geen ABR/CHT-begrip en geen officiële taxonomische rang."@nl ;
+    rdfs:domain dwc:Taxon ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:taxon/69 a dwc:Taxon ; bo:taxongroep \"other mammals\"@en ."@nl .
+
+#################################################################
+# Publicaties (schema:ScholarlyArticle / schema:CreativeWork)
+#################################################################
+
+bo:deel
+    a owl:DatatypeProperty ;
+    rdfs:label "deel"@nl, "part/issue"@en ;
+    rdfs:comment "Vrije-tekst aanduiding van jaargang, aflevering, paginanummers of soms een datum bij een publicatie (bronveld Deel), bijvoorbeeld '44, 1' of '30-06-1995'. Niet op schema:volumeNumber gezet omdat het brongegeven inhoudelijk wisselt (niet consistent een jaargangnummer) en zo'n typeconversie onbetrouwbaar zou zijn."@nl ;
+    rdfs:domain schema:CreativeWork ;
+    rdfs:range xsd:string ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:publicatie/19_1 a schema:ScholarlyArticle ; bo:deel \"44, 1\" ."@nl .
+
+#################################################################
+# Open punt
+#################################################################
+
+# Deze properties staan in de instantie-namespace (.../id/boneinfo/) in
+# plaats van een eigen .../def/boneinfo#-vocabulaire-namespace, zoals CEO
+# die bijvoorbeeld wel heeft (.../def/ceo# naast .../cho-kennis/id/...).
+# Dat is bij het eerste ontwerp een bewuste maar pragmatische keuze
+# geweest, geen principiële. De namespace wisselen zou nu een herbouw van
+# de hele keten vergen (TriplyDB-upload, CONSTRUCT-projectie, Elastic-
+# service, en de hardcoded predicaat-URI's in web/search.js, web/detail.js
+# en construct/boneinfo.rq) en is daarom bewust niet los van een expliciet
+# verzoek doorgevoerd.
