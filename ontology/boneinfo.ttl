@@ -10,6 +10,9 @@
 @prefix geo:     <http://www.opengis.net/ont/geosparql#> .
 @prefix dwc:     <http://rs.tdwg.org/dwc/terms/> .
 @prefix schema:  <https://schema.org/> .
+@prefix cht:     <https://data.cultureelerfgoed.nl/term/id/rn/2/> .
+@prefix tooi-gm: <https://identifier.overheid.nl/tooi/id/gemeente/> .
+@prefix tooi-pv: <https://identifier.overheid.nl/tooi/id/provincie/> .
 
 #################################################################
 # BoneInfo-vocabulaire
@@ -76,20 +79,38 @@ bo:zoonr
 bo:gemeente
     a owl:DatatypeProperty ;
     rdfs:label "gemeente"@nl, "municipality"@en ;
-    rdfs:comment "Gemeentenaam als platte tekststring uit de bron (bronveld Gemeente). Nog niet gekoppeld aan een OWMS-gemeenteconcept zoals in CEO's eigen data (ceo:heeftGemeente); zie MAPPING.md, open punt 2."@nl ;
+    rdfs:comment "Gemeentenaam als platte tekststring uit de bron (bronveld Gemeente), voor weergave en vrije tekstzoek. Zie bo:heeftGemeente voor de gekoppelde TOOI-conceptvariant, waar bekend."@nl ;
     rdfs:domain ceo:Vondstlocatie ;
     rdfs:range xsd:string ;
     rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
     skos:example "bo:cluster/15 bo:gemeente \"Heumen\" ."@nl .
 
+bo:heeftGemeente
+    a owl:ObjectProperty ;
+    rdfs:label "heeft gemeente"@nl, "has municipality"@en ;
+    rdfs:comment "Koppelt een cluster aan het TOOI-gemeenteconcept (identifier.overheid.nl/tooi) dat overeenkomt met bo:gemeente, waar dat met zekerheid is vast te stellen. Bewust TOOI, niet OWMS: TOOI is de actuele overheidsstandaard (OWMS is de oudere, inmiddels vervangen standaard) en kent, anders dan OWMS, geen afzonderlijk 'kadastrale gemeente'-concept per gemeentenaam (dus geen tweevoud/ambiguïteit daarover). TOOI bevat ook opgeheven/gefuseerde gemeenten (met een einddatum), wat BoneInfo's veel oudere bronvermeldingen nodig hebben. Van de 327 unieke bronwaarden zijn er 307 met zekerheid gekoppeld (directe naam-match of een met de hand gecontroleerde schrijfwijze-/afkortingsvariant); de rest (ambigue namen zoals 'Bergen', samengestelde brondatafouten, gemeenten van vóór TOOI's dekking, of een plaats/buurtschap abusievelijk in dit veld) is bewust ongekoppeld gelaten in plaats van gegokt. Zie scripts/crosswalk.py voor de volledige tabel en de motivatie per geval, en TODO.md."@nl ;
+    rdfs:domain ceo:Vondstlocatie ;
+    rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:cluster/15 bo:heeftGemeente tooi-gm:gm0252 ."@nl .
+
 bo:provincie
     a owl:DatatypeProperty ;
     rdfs:label "provincie"@nl, "province"@en ;
-    rdfs:comment "Provincienaam als platte tekststring uit de bron (bronveld Provincie). Zelfde beperking als bo:gemeente: nog geen OWMS-koppeling."@nl ;
+    rdfs:comment "Provincienaam als platte tekststring uit de bron (bronveld Provincie), voor weergave en vrije tekstzoek. Zie bo:heeftProvincie voor de gekoppelde TOOI-conceptvariant."@nl ;
     rdfs:domain ceo:Vondstlocatie ;
     rdfs:range xsd:string ;
     rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
     skos:example "bo:cluster/15 bo:provincie \"Gelderland\" ."@nl .
+
+bo:heeftProvincie
+    a owl:ObjectProperty ;
+    rdfs:label "heeft provincie"@nl, "has province"@en ;
+    rdfs:comment "Koppelt een cluster aan het TOOI-provincieconcept dat overeenkomt met bo:provincie. Alle 12 provincies zijn gekoppeld (inclusief de bron-waarde 'Friesland', als alias voor de huidige officiële naam Fryslân). Zie bo:heeftGemeente voor de motivatie TOOI i.p.v. OWMS."@nl ;
+    rdfs:domain ceo:Vondstlocatie ;
+    rdfs:range skos:Concept ;
+    rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
+    skos:example "bo:cluster/15 bo:heeftProvincie tooi-pv:pv25 ."@nl .
 
 bo:complextype
     a owl:DatatypeProperty ;
@@ -103,16 +124,16 @@ bo:complextype
 bo:vondstverwerving
     a owl:DatatypeProperty ;
     rdfs:label "vondstverwerving"@nl, "acquisition method"@en ;
-    rdfs:comment "Hoe de vondst is verworven, als vrije tekst (bronveld Vondstverwerving), bijvoorbeeld 'Archeologisch: opgraving'. CEO's eigen ceo:heeftVerwerving verwacht een skos:Concept uit de CHT-thesaurus, geen vrije tekst; BoneInfo's waarden zijn niet 1-op-1 op die thesaurus te matchen zonder een handmatige crosswalk-tabel (zie MAPPING.md, open punt 3), vandaar deze eigen literal-property."@nl ;
+    rdfs:comment "Vangnet voor Vondstverwerving-brondatawaarden die niet voorkomen in de crosswalk naar ceo:heeftVerwerving (zie scripts/crosswalk.py). Voor alle 17 waarden die in de huidige dataset voorkomen is zo'n koppeling gevonden, dus deze property heeft in de huidige data geen enkel voorkomen; ze blijft alleen staan als vangnet voor een onverwachte toekomstige brondatawaarde."@nl ;
     rdfs:domain ceo:Vondstlocatie ;
     rdfs:range xsd:string ;
     rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;
-    skos:example "bo:cluster/15 bo:vondstverwerving \"Archeologisch: opgraving\" ."@nl .
+    skos:example "bo:cluster/15 bo:vondstverwerving \"Een onverwachte toekomstige waarde\" ."@nl .
 
 bo:verzamelwijze
     a owl:DatatypeProperty ;
     rdfs:label "verzamelwijze"@nl, "collection method"@en ;
-    rdfs:comment "De wijze van verzamelen van het botmateriaal, als vrije tekst (bronveld Verzamelwijze), bijvoorbeeld 'hand collected, intensive + sieved, coarse'. Beschrijft onderzoeksmethode, niet een ABR/CHT-begrip."@nl ;
+    rdfs:comment "De wijze van verzamelen van het botmateriaal, als vrije tekst (bronveld Verzamelwijze), bijvoorbeeld 'hand collected, intensive + sieved, coarse'. Blijft bewust een literal: ceo:heeftToestand (conditie: heel/gebroken/verweerd) is hiervoor het verkeerde doelpredicaat gebleken, en een geschiktere thesaurus-tak ('verzamelwijzen en monstertypes', rn/2) wordt niet in RCE's eigen productiedata gebruikt. Bovendien is deze brondatawaarde zelf samengesteld (methode + zeeffractie in één string), wat eerst gesplitst zou moeten worden voor een zinvolle crosswalk. Zie TODO.md."@nl ;
     rdfs:domain ceo:Vondstlocatie ;
     rdfs:range xsd:string ;
     rdfs:isDefinedBy <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> ;

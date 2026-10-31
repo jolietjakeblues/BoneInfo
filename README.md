@@ -48,9 +48,9 @@ aantal aanvullende `bo:`-properties waar niets passends bestond:
 | [Darwin Core](http://rs.tdwg.org/dwc/terms/) | Diersoorten (`dwc:Taxon`), vondst-registraties (`dwc:Occurrence`) |
 | [schema.org](https://schema.org/) | Publicaties en tijdschriften (CEO heeft geen bibliografisch model) |
 | [SKOS](http://www.w3.org/2004/02/skos/core#) | Lokaal periode-vocabulaire, koppeling naar het Nederlands Soortenregister |
-| `bo:` (dit project) | ~20 kleine aanvullende properties, zie [`ontology/boneinfo.ttl`](ontology/boneinfo.ttl) |
+| `bo:` (dit project) | ~22 kleine aanvullende properties, zie [`ontology/boneinfo.ttl`](ontology/boneinfo.ttl) |
 
-De 20 `bo:`-properties zijn formeel gedefinieerd (labels NL/EN, beschrijving,
+De 22 `bo:`-properties zijn formeel gedefinieerd (labels NL/EN, beschrijving,
 domain/range, voorbeeld per term) in
 [`ontology/boneinfo.ttl`](ontology/boneinfo.ttl). Voor de motivatie per
 keuze — waarom bijvoorbeeld `bo:vondstverwerving` en niet `ceo:heeftVerwerving`
@@ -62,7 +62,7 @@ Namespace voor nieuwe resources: `https://linkeddata.cultureelerfgoed.nl/archeoz
 
 | | |
 |---|---|
-| Brondataset | [`archeozoologie/boneinfo`](https://linkeddata.cultureelerfgoed.nl/archeozoologie/boneinfo) — 273.541 triples, named graph `.../archeozoologie/graph/boneinfo` |
+| Brondataset | [`archeozoologie/boneinfo`](https://linkeddata.cultureelerfgoed.nl/archeozoologie/boneinfo) — 278.370 triples, named graph `.../archeozoologie/graph/boneinfo` |
 | Zoekprojectie | [`archeozoologie/boneinfo-elastic`](https://linkeddata.cultureelerfgoed.nl/archeozoologie/boneinfo-elastic) — gegenereerd met [`construct/boneinfo.rq`](construct/boneinfo.rq), 2.434 platte documenten (één per cluster) |
 | Elasticsearch-service | `Boneinfo` op `archeozoologie/boneinfo-elastic`, template: [`triply/elastic-service.json`](triply/elastic-service.json) |
 
@@ -160,12 +160,14 @@ curl -H "Authorization: Bearer $TRIPLY_TOKEN" -H "Content-Type: application/json
 
 ## Open punten
 
-- **Taal**: UI-teksten zijn Nederlandstalig; Engelse diersoortnamen
-  (`dwc:vernacularName@en`) zitten in de brondata maar worden nu alleen in de
-  taxonomie-uitklap getoond, niet in de hoofdzoekvelden/facetten. Een
-  volledige NL/EN-toggle is niet gebouwd.
-- **CSV/GeoJSON-export**: aanwezig voor de huidige (gefilterde) resultaten,
-  niet voor de volledige dataset in één keer.
-- Zie [MAPPING.md](MAPPING.md) "Open punten" voor de ontologie-keuzes die
-  nog ter discussie staan (datering-keten, `heeftVerwerving`/`heeftToestand`,
-  gemeente/provincie-koppeling aan OWMS).
+Zie [TODO.md](TODO.md) voor de backlog (literatuur verrijken met DANS e.a.,
+de `bo:`-namespace van `/id/` naar `/def/` verhuizen, en overige suggesties)
+en [MAPPING.md](MAPPING.md) "Open punten" voor de kleinere, nog ter
+discussie staande ontologie-keuzes (datering-keten, `bo:heeftTaxon`).
+`ceo:heeftVerwerving` en de gemeente/provincie-koppeling aan TOOI zijn
+inmiddels geïmplementeerd (zie TODO.md "Uitgevoerd").
+
+**CSV/GeoJSON-export** is aanwezig voor de huidige (gefilterde) resultaten;
+een export van de volledige dataset in één keer is bewust niet gebouwd —
+die data staat al compleet op
+[cultureelerfgoed.info/BoneInfo](https://cultureelerfgoed.info/BoneInfo/).
