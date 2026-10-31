@@ -174,8 +174,9 @@ main { max-width: 1600px; margin: 0 auto; padding: 24px 28px 60px; }
   cursor: pointer;
 }
 .ghost-btn:hover { background: var(--grijs-1); }
-.map-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.map-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
 .map-head h2 { margin: 0; }
+.map-actions { display: flex; align-items: center; gap: 14px; }
 
 .status { min-height: 1.2em; color: var(--grijs-4); font-size: 0.9rem; }
 .status.error { color: var(--rood); }

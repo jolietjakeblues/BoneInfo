@@ -32,6 +32,32 @@ VERWERVING_CROSSWALK = {
     'Onbekend': '5e0fa4ad-82b0-4970-b43d-e0cdb6a97d73',
 }
 
+# skos:prefLabel per concept UUID used above (NL), fetched from the same rce/cho
+# thesaurus graph. The CONSTRUCT query that builds the flat search projection
+# (construct/boneinfo.rq) only has access to the boneinfo dataset itself, not the
+# external RCE thesaurus -- so boneinfo_to_rdf.py caches these labels locally as
+# `cht:<uuid> skos:prefLabel "..."@nl` triples (same pattern already used for the
+# local bo:periode/* concepts) to make ceo:heeftVerwerving's label resolvable
+# without a federated/cross-dataset query.
+VERWERVING_LABELS = {
+    '0bd089db-adf3-4246-8828-e64224e2324b': 'archeologisch: (veld)kartering',
+    '5eff498d-2404-4386-8a20-de02a7de841e': 'archeologisch: begeleiding',
+    'e06a84fa-62e8-42ff-8f38-0ddfe9485a15': 'archeologisch: booronderzoek',
+    'bd4d913f-1cab-4f08-ab00-77b64a6273e0': 'archeologisch: inspectie',
+    '4e0dd439-480f-4039-bccc-4ce5ca2cbc05': 'archeologisch',
+    '00714835-b307-4990-8f11-12b6d62bf1ba': 'archeologisch: opgraving',
+    'a3354be9-15eb-4066-a4ec-40ed8895cb5a': 'archeologisch: proefputten-/proefsleuvenonderzoek',
+    '967bfdf8-c44d-4c69-8318-34ed1ab1e784': 'archeologisch: onderwaterarcheologie',
+    'b2aa3a32-1f79-4ddf-81b5-2cdd28ad4919': 'indirect: collectiebeschrijving',
+    'e568523c-dae4-4f7c-a825-f4497a50fa00': 'niet-archeologisch: waterwerk en exploitatie',
+    '5e3bd93f-64ac-4983-b626-6e1061c2c44a': 'niet-archeologisch: baggerwerk',
+    '7fba08ea-17d7-4e26-be5f-0a330a5fc4d1': 'niet-archeologisch: booronderzoek',
+    'd303201f-d9c5-44d7-a57c-b65644fed2aa': 'niet-archeologisch: graafwerk',
+    'cdc44e35-c06f-4eca-97c3-7a0a2dafc53b': 'niet-archeologisch: metaaldetectie',
+    '64393867-4106-4bb1-8132-de74760e6531': 'niet-archeologisch',
+    '5e0fa4ad-82b0-4970-b43d-e0cdb6a97d73': 'verwervingswijze onbepaald',
+}
+
 # BoneInfo `Gemeente` -> TOOI gemeente concept URI (identifier.overheid.nl/tooi).
 # Built by bulk SPARQL lookup (exact label match, rdf:type ont:Gemeente) against
 # the dedicated TOOI endpoint; covers both current and historical (merged) gemeenten,

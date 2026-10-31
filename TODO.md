@@ -85,10 +85,17 @@ volledige doorloop van de hele keten opnieuw.
   motivatie per geval: [`scripts/crosswalk.py`](scripts/crosswalk.py)
   (`TOOI_GEMEENTE`, `TOOI_PROVINCIE`, `GEMEENTE_ALIASES`).
 
+  **Belangrijk:** `construct/boneinfo.rq` is mee aangepast — zonder die
+  wijziging zou het `vondstverwerving`-veld in de zoekprojectie na het
+  herladen leeg blijven, omdat `bo:vondstverwerving` nu voor bijna elk
+  cluster vervangen is door `ceo:heeftVerwerving`. Zie MAPPING.md, open
+  punt 3.
+
   **Vervolgstap voor jou:** `output/boneinfo_full.trig` is opnieuw
-  gegenereerd (278.370 triples, was 273.542) — moet opnieuw geüpload worden
-  naar TriplyDB (oude graph vervangen), waarna `construct/boneinfo.rq`
-  opnieuw gedraaid moet worden voor de zoekprojectie.
+  gegenereerd (278.386 triples, was 273.542) — moet opnieuw geüpload worden
+  naar TriplyDB (oude graph vervangen), waarna het aangepaste
+  `construct/boneinfo.rq` opnieuw gedraaid moet worden voor de
+  zoekprojectie.
 
 ## Heroverwogen (niet uitgevoerd)
 

@@ -63,6 +63,7 @@ const state = {
   filters: {}, // { provincie: [...], complextype: [...], diergroep: [...], beginperiode: [...], gemeente: 'str', diersoort: 'str', onderzoek: 'str', literatuur: 'str', clusternummer: 'str', vanaf, tot, modus }
   page: 0,
   sort: 'relevantie',
+  resolution: 'locaties', // kaartraster: 'locaties' (exacte brongeometrie) of '1km'/'5km'/'10km'/'25km', zie search.js MAP_RESOLUTIONS
 };
 
 let map = null;
@@ -115,8 +116,15 @@ function renderMap(aggs) {
     const opKaart = buckets.reduce((sum, b) => sum + b.doc_count, 0);
     const zonderCoordinaten = Math.max(0, totaal - opKaart);
     const nl = getLang() === 'nl';
+    const isRaster = state.resolution !== 'locaties';
     const bits = [
-      nl ? `${plotted} locatie${plotted === 1 ? '' : 's'} op de kaart` : `${plotted} location${plotted === 1 ? '' : 's'} on the map`,
+      isRaster
+        ? nl
+          ? `${plotted} rastercel${plotted === 1 ? '' : 'len'} op de kaart`
+          : `${plotted} grid cell${plotted === 1 ? '' : 's'} on the map`
+        : nl
+        ? `${plotted} locatie${plotted === 1 ? '' : 's'} op de kaart`
+        : `${plotted} location${plotted === 1 ? '' : 's'} on the map`,
       nl ? `${totaal} cluster${totaal === 1 ? '' : 's'} totaal` : `${totaal} cluster${totaal === 1 ? '' : 's'} total`,
     ];
     if (zonderCoordinaten > 0) bits.push(nl ? `${zonderCoordinaten} zonder coördinaten` : `${zonderCoordinaten} without coordinates`);
@@ -619,7 +627,7 @@ function downloadGeoJson() {
       return {
         type: 'Feature',
         geometry: { type: 'Point', coordinates: [latlon[1], latlon[0]] },
-        properties: { aantal_clusters: b.doc_count },
+        properties: { aantal_clusters: b.doc_count, raster: state.resolution },
       };
     })
     .filter(Boolean);
@@ -716,6 +724,10 @@ function wireUp() {
   });
   qs('#sort').addEventListener('change', (e) => {
     state.sort = e.target.value;
+    run();
+  });
+  qs('#map-resolution').addEventListener('change', (e) => {
+    state.resolution = e.target.value;
     run();
   });
   qs('#jaar-modus').addEventListener('change', (e) => {

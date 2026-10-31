@@ -152,17 +152,35 @@ function facetAggs(filters) {
   );
 }
 
-// Clustering van locaties op de kaart: groepeert punten op (bijna) exact
-// dezelfde brongeometrie (precision 10 ≈ ~1 m), met het zwaartepunt per groep
-// zodat de marker op de juiste plek staat ook als meerdere clusters net iets
-// uiteen liggen. Komt overeen met de "unieke broncoördinaten"-weergave uit de
-// oorspronkelijke BoneInfo-zoekschermen.
-export function geoAgg(filters) {
+// Rasterresolutie voor de kaart. 'locaties' (standaard) groepeert punten op
+// (bijna) exact dezelfde brongeometrie (geohash_grid precision 10 ≈ ~1 m) —
+// komt overeen met de "unieke broncoördinaten"-weergave uit de
+// oorspronkelijke BoneInfo-zoekschermen. De overige niveaus gebruiken
+// geotile_grid (dezelfde tegelindeling als de achtergrondkaart) met een
+// zoomniveau dat op de breedtegraad van Nederland (~52°N) ongeveer de
+// genoemde celgrootte geeft. Dit is bewust een WEERGAVEresolutie, geen
+// locatienauwkeurigheid: tegels zijn nooit exact vierkante kilometers, en
+// de werkelijke celgrootte verschilt licht tussen het noorden en zuiden
+// van het land.
+export const MAP_RESOLUTIONS = {
+  locaties: null,
+  '1km': 14,
+  '5km': 12,
+  '10km': 11,
+  '25km': 10,
+};
+
+export function geoAgg(filters, resolution = 'locaties') {
+  const zoom = MAP_RESOLUTIONS[resolution] ?? null;
+  const grid =
+    zoom === null
+      ? { geohash_grid: { field: WKT_FIELD, precision: 10, size: 10000 } }
+      : { geotile_grid: { field: WKT_FIELD, precision: zoom, size: 10000 } };
   return {
     filter: { bool: { filter: filterClauses(filters, null) } },
     aggs: {
       locaties: {
-        geohash_grid: { field: WKT_FIELD, precision: 10, size: 10000 },
+        ...grid,
         aggs: {
           middelpunt: { geo_centroid: { field: WKT_FIELD } },
         },
@@ -171,7 +189,7 @@ export function geoAgg(filters) {
   };
 }
 
-export function buildQuery({ search = '', filters = {}, page = 0, sort = 'relevantie' } = {}) {
+export function buildQuery({ search = '', filters = {}, page = 0, sort = 'relevantie', resolution = 'locaties' } = {}) {
   const sortClause =
     sort === 'jaar'
       ? [{ [fields.beginjaar]: { order: 'asc', missing: '_last' } }]
@@ -192,7 +210,7 @@ export function buildQuery({ search = '', filters = {}, page = 0, sort = 'releva
       post_tags: ['</mark>'],
       fragment_size: 180,
     },
-    aggs: { ...facetAggs(filters), kaart: geoAgg(filters) },
+    aggs: { ...facetAggs(filters), kaart: geoAgg(filters, resolution) },
   };
 }
 

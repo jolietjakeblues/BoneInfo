@@ -34228,6 +34228,8 @@ archeologische begeleiding te Groesbeek""" .
         schema:datePublished "1988"^^xsd:gYear ;
         schema:name "Karolingisch botmateriaal uit A.W.N.-opgravingen in Deventer" .
 
+    cht:cdc44e35-c06f-4eca-97c3-7a0a2dafc53b skos:prefLabel "niet-archeologisch: metaaldetectie"@nl .
+
     <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/begindatering/100> a ceo:BeginDatering ;
         bo:jaar 1300 ;
         ceo:heeftPeriode <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/periode/LMEB> .
@@ -227295,6 +227297,10 @@ Van het dier zijn namelijk nagenoeg alle skeletelementen van de beide achterpote
         dwc:scientificName "Uropoda baloghi" ;
         bo:taxongroep "arthropods"@en .
 
+    cht:b2aa3a32-1f79-4ddf-81b5-2cdd28ad4919 skos:prefLabel "indirect: collectiebeschrijving"@nl .
+
+    cht:e568523c-dae4-4f7c-a825-f4497a50fa00 skos:prefLabel "niet-archeologisch: waterwerk en exploitatie"@nl .
+
     <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/cluster/1053> a ceo:ArcheologischComplex,
             ceo:Vondstlocatie ;
         rdfs:label "Nederzetting, onbepaald, ASSENDELVER POLDERS VINDPLAATS 28"@nl ;
@@ -242507,6 +242513,8 @@ De benen scharnieronderdelen worden uitgebreider beschreven in Hupperetz 1991 (w
             "tarbotten"@nl ;
         bo:taxongroep "sea-fishes"@en .
 
+    cht:967bfdf8-c44d-4c69-8318-34ed1ab1e784 skos:prefLabel "archeologisch: onderwaterarcheologie"@nl .
+
     <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/cluster/1001> a ceo:ArcheologischComplex,
             ceo:Vondstlocatie ;
         rdfs:label "Nederzetting, onbepaald, HOOGERHEIDE"@nl ;
@@ -251643,6 +251651,10 @@ Archeoplan Eco, Archaeo-Zoo, Elpenbeen""" ;
         dwc:taxonRank "species" ;
         skos:exactMatch <http://www.nederlandsesoorten.nl/nsr/concept/0AHCYSI10436> ;
         bo:taxongroep "arthropods"@en .
+
+    cht:7fba08ea-17d7-4e26-be5f-0a330a5fc4d1 skos:prefLabel "niet-archeologisch: booronderzoek"@nl .
+
+    cht:bd4d913f-1cab-4f08-ab00-77b64a6273e0 skos:prefLabel "archeologisch: inspectie"@nl .
 
     <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/cluster/1014> a ceo:ArcheologischComplex,
             ceo:Vondstlocatie ;
@@ -274741,6 +274753,8 @@ Zie ook clusters 2017-2018 en 2117"""@nl .
         skos:exactMatch <http://www.nederlandsesoorten.nl/nsr/concept/0AHCYFAQMMEY> ;
         bo:taxongroep "arthropods"@en .
 
+    cht:64393867-4106-4bb1-8132-de74760e6531 skos:prefLabel "niet-archeologisch"@nl .
+
     <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/cluster/1010> a ceo:ArcheologischComplex,
             ceo:Vondstlocatie ;
         rdfs:label "Stad, POSTELSTRAAT"@nl ;
@@ -281587,6 +281601,8 @@ Zie ook clusters 1268, 1283 en 1310."""@nl .
         dwc:phylum "Arthropoda" ;
         dwc:scientificName "Bovicola bovis" ;
         bo:taxongroep "arthropods"@en .
+
+    cht:5e3bd93f-64ac-4983-b626-6e1061c2c44a skos:prefLabel "niet-archeologisch: baggerwerk"@nl .
 
     <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/cluster/1019> a ceo:ArcheologischComplex,
             ceo:Vondstlocatie ;
@@ -289448,6 +289464,8 @@ Onderzoeksmeldingsnummer DO 24426 - waarnemingsnummer kon niet worden gevonden""
         dwc:taxonRank "species" ;
         skos:exactMatch <http://www.nederlandsesoorten.nl/nsr/concept/0AHCYSI10522> ;
         bo:taxongroep "arthropods"@en .
+
+    cht:e06a84fa-62e8-42ff-8f38-0ddfe9485a15 skos:prefLabel "archeologisch: booronderzoek"@nl .
 
     <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/cluster/1020> a ceo:ArcheologischComplex,
             ceo:Vondstlocatie ;
@@ -299413,6 +299431,8 @@ Het hier beschreven materiaal dateert van 1585 tot de 18e eeuw. Het gaat in tota
         skos:exactMatch <http://www.nederlandsesoorten.nl/nsr/concept/0AHCYSI10383> ;
         bo:taxongroep "arthropods"@en .
 
+    cht:5e0fa4ad-82b0-4970-b43d-e0cdb6a97d73 skos:prefLabel "verwervingswijze onbepaald"@nl .
+
     <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/cluster/100> a ceo:ArcheologischComplex,
             ceo:Vondstlocatie ;
         rdfs:label "Stad, BURSEPLEIN"@nl ;
@@ -304883,6 +304903,8 @@ Onderzoeksmeldingsnummer DO 24426 - waarnemingsnummer kon niet worden gevonden""
             "pad"@nl ;
         bo:taxongroep "amphibians"@en .
 
+    cht:0bd089db-adf3-4246-8828-e64224e2324b skos:prefLabel "archeologisch: (veld)kartering"@nl .
+
     <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/cluster/1355> a ceo:ArcheologischComplex,
             ceo:Vondstlocatie ;
         rdfs:label "Extractiekamp/-nederzetting, Polderweg"@nl ;
@@ -310230,6 +310252,8 @@ Onderzoeksmeldingsnummer DO 24426 - waarnemingsnummer kon niet worden gevonden""
     <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/periodiek/8> a schema:Periodical ;
         schema:name "Archaeofauna" .
 
+    cht:4e0dd439-480f-4039-bccc-4ce5ca2cbc05 skos:prefLabel "archeologisch"@nl .
+
     <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/cluster/1004> a ceo:ArcheologischComplex,
             ceo:Vondstlocatie ;
         rdfs:label "Legerplaats, VELSEN I"@nl ;
@@ -314112,6 +314136,8 @@ Van de in totaal 2734 in het veld bverzamelde resten van zoogdieren, vogels en v
             "noordse woelmuis"@nl ;
         skos:exactMatch <http://www.nederlandsesoorten.nl/nsr/concept/0AHCYFCTHSJD> ;
         bo:taxongroep "wild 4: other rodents"@en .
+
+    cht:d303201f-d9c5-44d7-a57c-b65644fed2aa skos:prefLabel "niet-archeologisch: graafwerk"@nl .
 
     <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/cluster/102> a ceo:ArcheologischComplex,
             ceo:Vondstlocatie ;
@@ -325928,6 +325954,8 @@ Van de visresten is een steekproef genomen die is geanalyseerd. Deze gegevens zi
         schema:addressLocality "Breda" ;
         schema:description "Vooronderzoek aan de resten van arthropoden in zes monsters uit de Merovingische waterput 3611, Steenakker-Emerweg, Breda (BR-53-95). Het gaat om de onderste putvulling. Alle resten waren goed tot zeer goed geconserveerd. In een aantal monsters zijn interessante resten gevonden van insekten. De mijtenfauna vertegenwoordigt soorten uit diverse ecologische groepen."@nl .
 
+    cht:5eff498d-2404-4386-8a20-de02a7de841e skos:prefLabel "archeologisch: begeleiding"@nl .
+
     <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/cluster/1208> a ceo:ArcheologischComplex,
             ceo:Vondstlocatie ;
         rdfs:label "Nederzetting, onbepaald, Tweede Bruggetje (Hoep Noord)"@nl ;
@@ -330299,6 +330327,8 @@ OPMERKING: Bij Dama dama en Capreolus capreolus staat in de soortenlijst een *. 
         schema:addressLocality "Assendelft" ;
         schema:description "Onderzoek aan de resten van insecten en arthropoden van site Q van het Assendelver Polders project. De resten waren zeer goed geconserveerd. Een deel was verkoold. Bij het onderzoek is de nadruk gelegd op resten van kevers. Aan de hand van deze resten kon een indruk gegeven worden van de omgeving van de nederzetting, de inrichting en het gebruik van de woonruimte en de voorkomende 'schadelijke' insecten ('insect pests'). "@nl .
 
+    cht:a3354be9-15eb-4066-a4ec-40ed8895cb5a skos:prefLabel "archeologisch: proefputten-/proefsleuvenonderzoek"@nl .
+
     <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/taxon/273> a dwc:Taxon ;
         dwc:class "Actinopterygii" ;
         dwc:family "Gadidae" ;
@@ -330696,5 +330726,7 @@ OPMERKING: Bij Dama dama en Capreolus capreolus staat in de soortenlijst een *. 
         dwc:vernacularName "cattle"@en,
             "rund"@nl ;
         bo:taxongroep "domestic mammals"@en .
+
+    cht:00714835-b307-4990-8f11-12b6d62bf1ba skos:prefLabel "archeologisch: opgraving"@nl .
 }
 

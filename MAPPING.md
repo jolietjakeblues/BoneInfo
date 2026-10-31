@@ -4,12 +4,12 @@
 > zoeksite, kruislink). Dit document gaat alleen over de RDF-mapping zelf.
 
 Bron: `BoneInfo_V01_10.mdb` (Access). Volledige dataset: 2.434 clusters,
-278.370 triples, in één named graph (TriG). Daarnaast een pilot-subset van
+278.386 triples, in één named graph (TriG). Daarnaast een pilot-subset van
 30 clusters die zowel diersoorten als publicaties hebben, voor snelle review.
 
 Bestanden (in [`output/`](output/)):
-- `boneinfo_full.trig` (278.370 triples) / `boneinfo_full_es.ndjson` (2.434 docs)
-- `boneinfo_pilot.trig` (5.106 triples) / `boneinfo_pilot_es.ndjson` (30 docs)
+- `boneinfo_full.trig` (278.386 triples) / `boneinfo_full_es.ndjson` (2.434 docs)
+- `boneinfo_pilot.trig` (5.111 triples) / `boneinfo_pilot_es.ndjson` (30 docs)
 
 ## Namespace
 
@@ -174,6 +174,12 @@ hoeven genereren.
      "verwervingswijzen"). `bo:vondstverwerving` blijft alleen als vangnet
      voor een onverwachte toekomstige waarde (komt in de huidige dataset
      dus nergens voor). Zie [`scripts/crosswalk.py`](scripts/crosswalk.py).
+     De `cht:`-concept-URI's zelf zijn extern (RCE-thesaurusgraph, niet in
+     `archeozoologie/boneinfo`); `construct/boneinfo.rq` kan dus niet zomaar
+     het `skos:prefLabel` ophalen voor de zoekprojectie. Daarom cachet
+     `boneinfo_to_rdf.py` het label lokaal (`cht:<uuid> skos:prefLabel
+     "..."@nl`, 16 triples voor de concepten die daadwerkelijk gebruikt
+     worden) — zelfde patroon als de lokale `bo:periode/*`-concepten.
    - `ceo:heeftToestand` voor `bo:verzamelwijze` is **afgewezen**, niet
      geïmplementeerd: bij nader inzien gaat `ceo:heeftToestand` over de
      *conditie* van een vondst (heel/gebroken/verweerd), niet over de
@@ -199,7 +205,7 @@ Het script leest de brontabellen uit CSV-exports van de Access-database (zie
 CSV's zelf opnieuw exporteert.
 
 De volledige dataset is al gegenereerd: 2.434 clusters, 1.183 van de 1.390
-soorten gebruikt, 184 tijdschriften, 51 periode-concepten, **278.370
+soorten gebruikt, 184 tijdschriften, 51 periode-concepten, **278.386
 triples** in `boneinfo_full.trig`. De CSV-export en verwerkingslogica zijn
 voor beide varianten identiek.
 
