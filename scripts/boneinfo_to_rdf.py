@@ -29,6 +29,8 @@ from pyproj import Transformer
 from rdflib import Dataset, Namespace, URIRef, Literal, BNode
 from rdflib.namespace import RDF, RDFS, XSD, SKOS, OWL
 
+from crosswalk import CHT_RN2, VERWERVING_CROSSWALK, resolve_gemeente, resolve_provincie
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 IN_DIR = REPO_ROOT / "data" / "csv"
 OUT_DIR = REPO_ROOT / "output"
@@ -46,6 +48,7 @@ CEO = Namespace("https://linkeddata.cultureelerfgoed.nl/def/ceo#")
 GEO = Namespace("http://www.opengis.net/ont/geosparql#")
 DWC = Namespace("http://rs.tdwg.org/dwc/terms/")
 SCHEMA = Namespace("https://schema.org/")
+CHT = Namespace(CHT_RN2)
 
 rd_to_wgs84 = Transformer.from_crs("EPSG:28992", "EPSG:4326", always_xy=True)
 
@@ -138,6 +141,7 @@ def main():
     ds.bind("dwc", DWC)
     ds.bind("schema", SCHEMA)
     ds.bind("skos", SKOS)
+    ds.bind("cht", CHT)
     g = ds.graph(GRAPH)
 
     period_scheme = BO["periodeSchema"]
@@ -232,7 +236,6 @@ def main():
             (SCHEMA.addressLocality, "Plaats"),
             (BO.gemeente, "Gemeente"),
             (BO.provincie, "Provincie"),
-            (BO.vondstverwerving, "Vondstverwerving"),
             (BO.verzamelwijze, "Verzamelwijze"),
             (BO.omvang, "Omvang"),
             (BO.opdrachtgever, "Opdrachtgever"),
@@ -244,6 +247,30 @@ def main():
             val = nz(c[field])
             if val:
                 g.add((cluster_uri, bo_prop, Literal(val)))
+
+        # vondstverwerving: ceo:heeftVerwerving + CHT-thesaurusconcept waar bekend
+        # (zie scripts/crosswalk.py); bo:vondstverwerving blijft alleen als vangnet
+        # voor een onbekende toekomstige brondatawaarde.
+        verwerving = nz(c["Vondstverwerving"])
+        if verwerving:
+            concept = VERWERVING_CROSSWALK.get(verwerving)
+            if concept:
+                g.add((cluster_uri, CEO.heeftVerwerving, CHT[concept]))
+            else:
+                g.add((cluster_uri, BO.vondstverwerving, Literal(verwerving)))
+
+        # gemeente/provincie: TOOI-concept naast de bestaande literal, waar bekend
+        # (zie scripts/crosswalk.py; bewust TOOI i.p.v. OWMS, zie TODO.md)
+        gemeente = nz(c["Gemeente"])
+        if gemeente:
+            gemeente_uri = resolve_gemeente(gemeente)
+            if gemeente_uri:
+                g.add((cluster_uri, BO.heeftGemeente, URIRef(gemeente_uri)))
+        provincie = nz(c["Provincie"])
+        if provincie:
+            provincie_uri = resolve_provincie(provincie)
+            if provincie_uri:
+                g.add((cluster_uri, BO.heeftProvincie, URIRef(provincie_uri)))
 
         gewogen = yesno_bool(c["Gewogen"])
         if gewogen is not None:

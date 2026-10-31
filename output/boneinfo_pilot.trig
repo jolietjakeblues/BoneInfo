@@ -1,5 +1,6 @@
 @prefix bo: <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/> .
 @prefix ceo: <https://linkeddata.cultureelerfgoed.nl/def/ceo#> .
+@prefix cht: <https://data.cultureelerfgoed.nl/term/id/rn/2/> .
 @prefix dwc: <http://rs.tdwg.org/dwc/terms/> .
 @prefix geo: <http://www.opengis.net/ont/geosparql#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -3760,6 +3761,8 @@
         bo:complextype "Crematiegraf" ;
         bo:gemeente "Heumen" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0252> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv25> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "unknown" ;
         bo:onderzoeker "Cuijpers, A.G.F.; Amersfoort" ;
@@ -3769,13 +3772,13 @@
         bo:verzamelwijze "hand collected, intensive + sieved, coarse" ;
         bo:vondstdatum "09-10-1994" ;
         bo:vondstjaar 1994 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 15 ;
         ceo:archis2Waarnemingsnummer "26337" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/15_1> ;
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/15> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/15> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/15> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Malden" ;
         schema:description "Een crematie die is aangetroffen in een kuil met paalsporen eromheen, van mogelijk een vierkant dodenhuis. Het graf is toe te wijzen aan de Hilversum- cultuur. De crematie bevond zich in een urn. Er is sprake van minimaal twee individuen: een kind en een volwassene. Het geslacht was niet duidelijk vast te stellen."@nl .
 
@@ -3785,6 +3788,8 @@
         bo:complextype "Terp/wierde" ;
         bo:gemeente "Delfzijl" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0010> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv20> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "1-10 bones" ;
         bo:onderzoeker "Lauwerier, R.C.G. & A.G.F.M. Cuijpers" ;
@@ -3794,13 +3799,13 @@
         bo:verzamelwijze "hand collected" ;
         bo:vondstdatum "00-00-1993" ;
         bo:vondstjaar 1993 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 43 ;
         ceo:archis2Waarnemingsnummer "26572" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/43_1> ;
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/43> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/43> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/43> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Heveskes" ;
         schema:description "Vraagstelling: grafveld of nederzetting (gecremeerd materiaal). Na onderzoek blijkt dat het alleen om dierlijke resten gaat, waarvan schaap/geit met zekerheid is aangetoond. Er zijn geen aanwijzingen dat er op deze plek een grafveld ligt.   "@nl .
 
@@ -3810,6 +3815,8 @@
         bo:complextype "Havezathe/ridderhofstad" ;
         bo:gemeente "Hengelo" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0164> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv23> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "11-100 bones" ;
         bo:onderzoeker "Laarman, F.J.; Amersfoort" ;
@@ -3819,13 +3826,13 @@
         bo:verzamelwijze "hand collected" ;
         bo:vondstdatum "00-00-1995" ;
         bo:vondstjaar 1995 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 48 ;
         ceo:archis2Waarnemingsnummer "34003" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/48_1> ;
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/48> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/48> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/48> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Hengelo" ;
         schema:description "Het botmateriaal is afkomstig uit een kuil in de voorhof van Huis Hengelo. De botten zijn van een volwassen varken (3-4 jaar) gezien de gebitsontwikkeling. Aanwezig zijn de schedel inclusief onderkaak en beide voorpoten compleet (van scapula tot kootjes). De conservering is zeer slecht en het lijkt of er verontreiniging op de botresten zit. Het enige meetbare bot was een mc4 met een grootste lengte van 70mm. "@nl .
 
@@ -4135,6 +4142,8 @@
         bo:complextype "Schans" ;
         bo:gemeente "Bellingwedde" ;
         bo:gewogen false ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0007> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv20> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "1-10 bones" ;
         bo:onderzoeker "Lauwerier, R.C.G.M., J.J. Lenting & H.J.M. Meijers" ;
@@ -4144,13 +4153,13 @@
         bo:verzamelwijze "hand collected" ;
         bo:vondstdatum "01-09-1983" ;
         bo:vondstjaar 1988 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 19 ;
         ceo:archis2Waarnemingsnummer "238060" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/19_1> ;
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/19> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/19> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/19> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Oudeschans" ;
         schema:description "Onderzoek aan een hanger of amulet, die eruit ziet als een hoektand. Het object komt uit een sloot die langs een soldatenbarak liep en als riool werd gebruikt. De 'neptand' is gesneden uit een stukje pijpbeen van een rund of paard. Het geheel is gevat in een hulsje van een lood-tin-legering. Waarschijnlijk gaat het hier om een fragment van een rammelaar. Dit type rammelaar is bekend van o.a. 17e en 18e eeuwse schilderijen. "@nl .
 
@@ -4160,6 +4169,8 @@
         bo:complextype "Grafheuvel, onbepaald" ;
         bo:gemeente "Wervershoof" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0459> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv27> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "11-100 bones" ;
         bo:onderzoeker "Lauwerier, R.C.G.M.; Amersfoort" ;
@@ -4169,7 +4180,6 @@
         bo:verzamelwijze "hand collected, global" ;
         bo:vondstdatum "24-08-1995" ;
         bo:vondstjaar 1995 ;
-        bo:vondstverwerving "Niet-archeologisch: onbepaald" ;
         bo:zoonr 21 ;
         ceo:archis2Vondstmeldingsnummer "66663" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/21_1>,
@@ -4177,6 +4187,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/21> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/21> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/21> ;
+        ceo:heeftVerwerving cht:64393867-4106-4bb1-8132-de74760e6531 ;
         schema:addressLocality "Zwaagdijk-oost" ;
         schema:description "Gevonden in verstoorde grond afkomstig (?) uit grafheuvel. Deze grafheuvel is een beschermd monument (CMA-nr 14H-oo4), monument nummer: 1293. Het botmateriaal is naar boven gekomen door klandestine graverij in de heuvel. Het zijn min of meer complete botten uit de onderpoten van een niet volwassen paard en een stukje tibia van een rund. Dit laatste bot zat vol met vraatsporen van een hond."@nl .
 
@@ -4186,6 +4197,8 @@
         bo:complextype "Nederzetting, onbepaald" ;
         bo:gemeente "Laarbeek" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm1659> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv30> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "11-100 bones" ;
         bo:onderzoeker "Lauwerier, R.C.G.M.; Amersfoort" ;
@@ -4195,7 +4208,6 @@
         bo:verzamelwijze "hand collected" ;
         bo:vondstdatum "19-12-1989" ;
         bo:vondstjaar 1990 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 36 ;
         ceo:archis2Waarnemingsnummer "31586" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/36_1>,
@@ -4203,6 +4215,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/36> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/36> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/36> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Lieshout" ;
         schema:description "Het materiaal is verzameld bij opgravingen van vier boerderijplattegronden met mogelijke potstallen in het uitbreidingsplan Nieuwenhof. Het zeer broze bot is met de hand verzameld. Dit materiaal bestond voornamelijk uit kiezen van rund.  "@nl .
 
@@ -4212,6 +4225,8 @@
         bo:complextype "Grafveld, onbepaald" ;
         bo:gemeente "Hardenberg" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0160> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv23> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "1-10 bones" ;
         bo:onderzoeker "Cuijpers, A.G.F.; Amersfoort" ;
@@ -4221,7 +4236,6 @@
         bo:verzamelwijze "sieved, fine: < 4mm" ;
         bo:vondstdatum "00-00-1978" ;
         bo:vondstjaar 1978 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 45 ;
         ceo:archis2Waarnemingsnummer "29766" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/45_1>,
@@ -4229,6 +4243,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/45> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/45> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/45> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Marienberg" ;
         schema:description "Waarschijnlijk nederzettingsruis in grafkuil: het gaat om 10 gram verbrand bot. Er is zowel menselijk als dierlijk botmateriaal in de kuil aangetroffen. Dit materiaal is waarschijnlijk bij toeval in de kuil terechtgekomen, het betreft waarschijnlijk geen grafkuil.  "@nl .
 
@@ -4238,6 +4253,8 @@
         bo:complextype "Grafveld, crematies" ;
         bo:gemeente "Sluis-Aardenburg" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm1698> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv29> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "1-10 bones" ;
         bo:onderzoeker "Cuijpers, A.G.F.; Amersfoort" ;
@@ -4247,7 +4264,6 @@
         bo:verzamelwijze "sieved, fine: < 4mm" ;
         bo:vondstdatum "13-10-1994" ;
         bo:vondstjaar 1994 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 47 ;
         ceo:archis2Waarnemingsnummer "32677" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/47_1>,
@@ -4255,6 +4271,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/47> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/47> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/47> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Aardenburg" ;
         schema:description "Crematie met mogelijk grafbijgift. Het crematiegraf is onderdeel van het al eerder in 1988 en 1990 opgegraven grafveld behorend bij het castellum. Bij de crematie gaat het om twee individuen: een kind en een volwassen vrouw. In de crematie zaten ook resten van schaap/geit (als bijgiften).   "@nl .
 
@@ -4524,6 +4541,8 @@
         bo:complextype "Nederzetting, onbepaald" ;
         bo:gemeente "Goedereede" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0511> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv28> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "1-10 bones" ;
         bo:onderzoeker "Lauwerier, R.C.G.M.; Amersfoort" ;
@@ -4533,7 +4552,6 @@
         bo:verzamelwijze "hand collected" ;
         bo:vondstdatum "00-05-1995" ;
         bo:vondstjaar 1995 ;
-        bo:vondstverwerving "Archeologisch: (veld)kartering" ;
         bo:zoonr 22 ;
         ceo:archis2Waarnemingsnummer "35315" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/22_1>,
@@ -4543,6 +4561,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/22> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/22> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/22> ;
+        ceo:heeftVerwerving cht:0bd089db-adf3-4246-8828-e64224e2324b ;
         schema:addressLocality "Ouddorp" ;
         schema:description "Verzameld uit vondstlaag met aardewerk tijdens graafwerkzaamheden voor sloot. Het betreft een zeer kleine hoeveelheid, goed geconserveerd materiaal. Op enkele botten zitten knaagsporen en snijsporen. Een van de tibia's van schaap of geit is bewerkt: de uiteinden van de diafyse zijn afgerond en gepolijst. "@nl .
 
@@ -4654,6 +4673,8 @@
         bo:complextype "Crematiegraf" ;
         bo:gemeente "Houten" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0321> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv26> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "11-100 bones" ;
         bo:onderzoeker "Cuijpers, A.G.F.; Amersfoort" ;
@@ -4663,7 +4684,6 @@
         bo:verzamelwijze "sieved, fine: < 4mm" ;
         bo:vondstdatum "28-03-1994" ;
         bo:vondstjaar 1994 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 44 ;
         ceo:archis2Waarnemingsnummer "32670" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/44_1>,
@@ -4673,6 +4693,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/44> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/44> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/44> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Houten" ;
         schema:description "Crematies in nederzetting; dierlijk bot is zowel nederzetingsafval als mogelijke grafbijgift. Het gaat hierbij om tien vondsten, waarvan slechts een een redelijk onverstoorde crematie is. De andere 9 bestaan voornamelijk uit dierlijke resten. De crematie bestaat uit twee individuen: een volwassene en een kind. Daarnaast zat er dierlijk botmateriaal tussen."@nl .
 
@@ -4721,6 +4742,8 @@
         bo:complextype "Grafveld, crematies" ;
         bo:gemeente "Cuijk" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm1684> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv30> ;
         bo:invoerder "Lauwerier, R.C.G.M." ;
         bo:omvang "11-100 bones" ;
         bo:onderzoeker "Lauwerier, R.C.G.M.; Amersfoort" ;
@@ -4730,7 +4753,6 @@
         bo:verzamelwijze "sieved, coarse: >= 4mm" ;
         bo:vondstdatum "19-04-1989" ;
         bo:vondstjaar 1989 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 35 ;
         ceo:archis2Waarnemingsnummer "31591" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/35_1>,
@@ -4741,6 +4763,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/35> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/35> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/35> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Cuijk" ;
         schema:description "Onderzoek aan dierlijk materiaal uit menselijke crematieresten. Van de 42 begravingen bevatten er 4 dierlijk botmateriaal. De botten zijn overblijfselen van het maal dat aan de dode werd meegegeven en dat met de dode op de brandstapel werd verbrand. In twee graven zijn de gecremeerde resten van benen voorwerpen gevonden. De graven stammen uit de periode dat het castellumterrein van Ceuclum niet meer in gebruik was."@nl .
 
@@ -4843,6 +4866,8 @@
         bo:complextype "Kasteel" ;
         bo:gemeente "Landgraaf" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0882> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv31> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "11-100 bones" ;
         bo:onderzoeker "Jong de, TH.; Helmond" ;
@@ -4852,7 +4877,6 @@
         bo:verzamelwijze "hand collected, global" ;
         bo:vondstdatum "00-08-1980" ;
         bo:vondstjaar 1980 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 24 ;
         ceo:archis2Waarnemingsnummer "27136" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/24_1>,
@@ -4863,6 +4887,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/24> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/24> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/24> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Schaesberg" ;
         schema:description "Onderzoek aan een aantal botten die met de hand verzameld zijn uit een afvalput van het kasteel. Het gaat in totaal om 57 botten, afkomstig van 4 diersoorten en tenminste 6 individuen. Vooral varkensvlees en in mindere mate rundvlees werd geconsumeerd (vastgesteld aan de hand van de slachtsporen). Er is een skeletfragment van een konijn aangetroffen."@nl .
 
@@ -4871,6 +4896,8 @@
         rdfs:label "Klooster(complex), SALVATORPLEIN"@nl ;
         bo:complextype "Klooster(complex)" ;
         bo:gemeente "Susteren" ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0974> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv31> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "11-100 bones" ;
         bo:onderzoeker "Beerenhout, B.; Amsterdam" ;
@@ -4880,7 +4907,6 @@
         bo:verzamelwijze "sieved, fine: < 4mm" ;
         bo:vondstdatum "00-00-1991" ;
         bo:vondstjaar 1991 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 39 ;
         ceo:archis2Waarnemingsnummer "32424" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/39_1>,
@@ -4893,6 +4919,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/39> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/39> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/39> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Susteren" ;
         schema:description "Onderzoek aan de visresten uit de Karolingische periode van het middeleeuwse klooster. Onderzocht zijn: de fragmentatiegraad, verhouding tussen de verschillende elementen, taphonomie en de milieureconstructie en herkomst van de zoetwatervis.   "@nl .
 
@@ -4902,6 +4929,8 @@
         bo:complextype "Stad" ;
         bo:gemeente "Tiel" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0281> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv25> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "1-10 bones" ;
         bo:onderzoeker "Schelvis, J.; Groningen" ;
@@ -4911,7 +4940,6 @@
         bo:verzamelwijze "sieved, fine: < 4mm" ;
         bo:vondstdatum "01-10-1994" ;
         bo:vondstjaar 1994 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 42 ;
         ceo:archis2Waarnemingsnummer "32766" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/42_1>,
@@ -4922,6 +4950,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/42> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/42> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/42> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Tiel" ;
         schema:description "Monster onderzoek ongewervelden. Doel van dit vooronderzoek was om vast te stellen of de resten van ongewervelde dieren uitsluitsel konden geven over de aard van de bemonsterde kuilvulling cq aanwijzingen konden geven omtrent het gebruik van de ruimte achter de bebouwing waarin deze kuil gelegen was. Het was echter niet mogelijk om uitspraken te doen op basis van dit onderzoek."@nl .
 
@@ -4973,6 +5002,8 @@
         bo:complextype "Grafveld, crematies" ;
         bo:gemeente "Cuijk" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm1684> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv30> ;
         bo:invoerder "Lauwerier, R.C.G.M." ;
         bo:omvang "11-100 bones" ;
         bo:onderzoeker "Lauwerier, R.C.G.M.; Amersfoort" ;
@@ -4982,7 +5013,6 @@
         bo:verzamelwijze "sieved, coarse: >= 4mm" ;
         bo:vondstdatum "06-06-1988" ;
         bo:vondstjaar 1988 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 34 ;
         ceo:archis2Waarnemingsnummer "19449" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/34_1>,
@@ -4994,6 +5024,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/34> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/34> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/34> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Cuijk" ;
         schema:description "Onderzoek aan dierlijk materiaal uit crematieresten. Al het dierlijk materiaal is volledig gecremeerd. De botten zijn overblijfselen van het maal dat aan de dode werd meegegeven en dat met de dode op de brandstapel werd verbrand. Vooral varkensvlees en vlees van schaap of geit werd aan de doden meegegeven. Van de 131 graven bevatten er 18 ook dierlijke resten. In een of twee graven was ook rundvlees bijgezet.  "@nl .
 
@@ -5003,6 +5034,8 @@
         bo:complextype "Nederzetting, onbepaald" ;
         bo:gemeente "Noord-Beveland" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm1695> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv29> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "101-1000 bones" ;
         bo:onderzoeker "Lauwerier, R.C.G.M.; Amersfoort" ;
@@ -5012,7 +5045,6 @@
         bo:verzamelwijze "hand collected, global" ;
         bo:vondstdatum "00-00-1975" ;
         bo:vondstjaar 1975 ;
-        bo:vondstverwerving "Niet-archeologisch: graafwerk" ;
         bo:zoonr 38 ;
         ceo:archis2Waarnemingsnummer "20809" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/38_1>,
@@ -5026,6 +5058,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/38> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/38> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/38> ;
+        ceo:heeftVerwerving cht:d303201f-d9c5-44d7-a57c-b65644fed2aa ;
         schema:addressLocality "Wissenkerke" ;
         schema:description "Onderzoek aan faunaresten uit een inheems-Romeinse nederzetting van ca 50 na Chr. Het materiaal is opgegraven door de AWN, afdeling Zeeland. Tijdens dat onderzoek is o.a. een plattegrond van een boerderij aangetroffen. De landbouw in dit in de Romeinse tijd venige gebied was waarschijnlijk gericht op veeteelt, waarbij in Noordhoeksnol de nadruk lag op het houden van runderen.  "@nl .
 
@@ -5034,6 +5067,8 @@
         rdfs:label "Klooster(complex), SALVATORPLEIN"@nl ;
         bo:complextype "Klooster(complex)" ;
         bo:gemeente "Susteren" ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0974> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv31> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "11-100 bones" ;
         bo:onderzoeker "Beerenhout, B.; Amsterdam" ;
@@ -5043,7 +5078,6 @@
         bo:verzamelwijze "sieved, fine: < 4mm" ;
         bo:vondstdatum "00-00-1992" ;
         bo:vondstjaar 1992 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 40 ;
         ceo:archis2Waarnemingsnummer "32424" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/40_1>,
@@ -5057,6 +5091,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/40> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/40> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/40> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Susteren" ;
         schema:description "Onderzoek aan de visresten uit de periode 1000-1300 van het middeleeuwse klooster. Bij het onderzoek is gekeken naar de grootte van de vissen, taphonomie, milieureconstructie en herkomst van de zoetwatervissen.   "@nl .
 
@@ -5150,6 +5185,8 @@
         bo:complextype "Nederzetting, onbepaald" ;
         bo:gemeente "Noord-Beveland" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm1695> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv29> ;
         bo:invoerder "Lauwerier, R.C.G.M." ;
         bo:omvang "101-1000 bones" ;
         bo:onderzoeker "Lauwerier, R.C.G.M.; Amersfoort & P.J.A. van Mensch" ;
@@ -5159,7 +5196,6 @@
         bo:verzamelwijze "hand collected, global" ;
         bo:vondstdatum "00-00-1965" ;
         bo:vondstjaar 1965 ;
-        bo:vondstverwerving "Onbekend" ;
         bo:zoonr 37 ;
         ceo:archis2Waarnemingsnummer "20582" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/37_1>,
@@ -5173,6 +5209,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/37> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/37> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/37> ;
+        ceo:heeftVerwerving cht:5e0fa4ad-82b0-4970-b43d-e0cdb6a97d73 ;
         schema:addressLocality "Kats" ;
         schema:description "Onderzoek aan faunaresten uit een inheems-Romeinse nederzetting van ca 100 na Chr. Rund was de belangrijkste vleesleverancier. In mindere mate werd schapenvlees en mogelijk ook paardenvlees gegeten. In Kats was de landbouw gericht op veeteelt, met name van schapen. Vanwege het ontbreken van gezeefd materiaal was het niet mogelijk het belang van de jacht op vogels en visvangst vast te stellen voor de voedselvoorziening. "@nl .
 
@@ -5221,6 +5258,8 @@
         bo:complextype "Kasteel" ;
         bo:gemeente "Reimerswaal" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0703> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv29> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "101-1000 bones" ;
         bo:onderzoeker "Lauwerier, R.C.G.M. & F.J. Laarman" ;
@@ -5230,7 +5269,6 @@
         bo:verzamelwijze "hand collected, intensive + sieved, fine" ;
         bo:vondstdatum "00-00-1995" ;
         bo:vondstjaar 1995 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 28 ;
         ceo:archis2Waarnemingsnummer "34779" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/28_1>,
@@ -5252,6 +5290,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/28> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/28> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/28> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Waarde" ;
         schema:description "Publikatie Nehalennia bevat meer gegevens dan Intern verslag Archeozoologie/ROB. Botmateriaal opgegraven door AWN en medewerkers Provinciaal Depot Bodemvondsten. Het botmateriaal bevat resten van huisdieren (vee), jachtwild, schelpdieren, vis en gevogelte. Het gaat hier om gewoon keukenafval. Alleen de combinatie van zwaan en pauw geeft aan dat er op het kasteel vooraanstaande mensen woonden,"@nl .
 
@@ -5261,6 +5300,8 @@
         bo:complextype "Nederzetting, onbepaald" ;
         bo:gemeente "Raalte" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0177> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv23> ;
         bo:invoerder "Lauwerier, R.C.G.M." ;
         bo:omvang "more than 1000 bones" ;
         bo:onderzoeker "Laarman, F.J.; & R.C.G.M. Lauwerier, Osmania/ROB" ;
@@ -5270,7 +5311,6 @@
         bo:verzamelwijze "hand collected, intensive + sieved, fine" ;
         bo:vondstdatum "00-11-1993" ;
         bo:vondstjaar 1994 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 46 ;
         ceo:archis2Waarnemingsnummer "24470" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/46_1>,
@@ -5286,6 +5326,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/46> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/46> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/46> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Heeten" ;
         schema:description "Het dierlijk botmateriaal uit de inheemse nederzetting te Raalte-Heeten kan in drie groepen worden ingedeeld: gearticuleerde skeletten, grote 'dumps' en gewoon nederzettingsafval. Bij de gearticuleerde skeletten gaat het om 21 diergraven. Een aantal van de diergraven hebben mogelijk een rituele betekenis. De dumps wijzen op de aanwezigheid van veel mensen op het terrein in een korte periode (gerelateerd aan de ijzerproductie).  "@nl .
 
@@ -5322,6 +5363,8 @@
         bo:complextype "Kasteel" ;
         bo:gemeente "Horst" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0923> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv31> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "more than 1000 bones" ;
         bo:onderzoeker "Jong de, TH.; Helmond" ;
@@ -5331,7 +5374,6 @@
         bo:verzamelwijze "hand collected" ;
         bo:vondstdatum "19-06-1972" ;
         bo:vondstjaar 1971 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 25 ;
         ceo:archis2Waarnemingsnummer "29716" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/25_1>,
@@ -5357,6 +5399,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/25> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/25> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/25> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Horst" ;
         schema:description "Onderzoek aan de botresten uit de privaatvulling in de donjon (eind 16e eeuw) en een tweetal waterputten. Naast slachtvee en pluimvee is jachtwild aangetroffen. Het grove jachtwild ontbreekt echter. De belangrijkste vleesleveranciers zijn schapen en runderen. Varkens waren van minder belang. Uit het privaat kwam een geweifragment van een ree. Het fragment was sterk vervormd door een verwonding van het bastgewei."@nl .
 
@@ -5366,6 +5409,8 @@
         bo:complextype "Kasteel" ;
         bo:gemeente "Venlo" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0983> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv31> ;
         bo:invoerder "Lauwerier, R.C.G.M." ;
         bo:omvang "more than 1000 bones" ;
         bo:onderzoeker "Lauwerier, R.C.G.M.; Amersfoort" ;
@@ -5375,7 +5420,6 @@
         bo:verzamelwijze "hand collected, intensive" ;
         bo:vondstdatum "09-09-1991" ;
         bo:vondstjaar 1991 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 23 ;
         ceo:archis2Waarnemingsnummer "21253" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/23_1>,
@@ -5401,6 +5445,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/23> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/23> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/23> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Venlo" ;
         schema:description "Materiaal uit 10 cm dikke laag onder vloer van toren. Verzameld door troffelen. Het materiaal is afkomstig uit een laat middeleeuws stadskasteel. Naast de gewone huisdieren (waar het aandeel rund het grootst was) werd er ook wild gegeten (konijn), gevogelte (kip, gans, eend) en vis en schelpdieren.  "@nl .
 
@@ -5410,6 +5455,7 @@
         bo:complextype "Kasteel" ;
         bo:gemeente "Bergen" ;
         bo:gewogen true ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv31> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "101-1000 bones" ;
         bo:onderzoeker "Jong de, TH.; Helmond" ;
@@ -5419,7 +5465,6 @@
         bo:verzamelwijze "hand collected, intensive" ;
         bo:vondstdatum "00-00-1987" ;
         bo:vondstjaar 1987 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 26 ;
         ceo:archis2Waarnemingsnummer "17481" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/26_1>,
@@ -5448,6 +5493,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/26> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/26> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/26> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Afferden" ;
         schema:description "Het botmateriaal is opgegraven in 1987, 1988 en 1989 door de afdeling Bouwkunde van de T.U. Delft. De onderzochte faunaresten komen uit de gracht en uit twee privaatkokers.De belangrijkste vleesleveranciers waren runderen en schapen of geiten. Varkens werden minder vaak gegeten. Jachtwild vormde slechts een relatief klein aandeel in de dagelijkse voeding. Van een aantal dieren kon een schofthoogte gereconstrueerd worden."@nl .
 
@@ -5457,6 +5503,8 @@
         bo:complextype "Stad" ;
         bo:gemeente "Kampen" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0166> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv23> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "101-1000 bones" ;
         bo:onderzoeker "Laarman, F.J.; Amersfoort , Osmania" ;
@@ -5466,7 +5514,6 @@
         bo:verzamelwijze "hand collected" ;
         bo:vondstdatum "00-00-1989" ;
         bo:vondstjaar 1989 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 33 ;
         ceo:archis2Waarnemingsnummer "437943" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/33_1>,
@@ -5494,6 +5541,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/33> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/33> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/33> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Kampen" ;
         schema:description "Onderzoek aan faunaresten uit een water- en beerkelder aan de Meeuwenweg. De beerkelder lag op het perceel Vloeddijk 118. De kelder lag parallel aan de straatzijde en waarschijnlijk binnen het achterste gedeelte van het woonhuis. De samenstelling van de aangetroffen faunaresten en de aard van de botten (botten waaraan veel vlees zit) wijzen erop dat de gebruikers van deze put tot de 'gegoede burgerij' behoorden.  "@nl .
 
@@ -5503,6 +5551,8 @@
         bo:complextype "Klooster(complex)" ;
         bo:gemeente "Veere" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0717> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv29> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "more than 1000 bones" ;
         bo:onderzoeker "Zeiler, J.T.; Glimmen" ;
@@ -5512,7 +5562,6 @@
         bo:verzamelwijze "hand collected, intensive + sieved, fine" ;
         bo:vondstdatum "00-03-1993" ;
         bo:vondstjaar 1993 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 41 ;
         ceo:archis2Waarnemingsnummer "236002" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/41_1>,
@@ -5545,6 +5594,7 @@
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/41> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/41> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/41> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Vrouwenpolder" ;
         schema:description """Uit stortlaag met keukenafval werden faunaresten verzameld. De conserveringstoestand van het botmateriaal was slecht. Uit het onderzoek blijkt dat men op het klooster geen luxe huishouding voerde: het soortenspectrum bevat geen uitzonderlijke soorten. Rund was de belangrijkste vleesleverancier, gevolgd door varken en schaap/geit. Verder is er gevogelte en vis gegeten.\r
 \r
@@ -5556,6 +5606,8 @@ Zie ook cluster 1290."""@nl .
         bo:complextype "Stad" ;
         bo:gemeente "Kampen" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0166> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv23> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "more than 1000 bones" ;
         bo:onderzoeker "Laarman, F.J.; Amersfoort, Osmania" ;
@@ -5565,7 +5617,6 @@ Zie ook cluster 1290."""@nl .
         bo:verzamelwijze "hand collected, intensive" ;
         bo:vondstdatum "00-00-1988" ;
         bo:vondstjaar 1988 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 31 ;
         ceo:archis2Vondstmeldingsnummer "65895" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/31_1>,
@@ -5598,6 +5649,7 @@ Zie ook cluster 1290."""@nl .
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/31> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/31> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/31> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Kampen" ;
         schema:description "Onderzoek aan botmateriaal uit twee beerputten die zijn aangetroffen bij een archeologisch onderzoek op het schoolplein van de voormalige Helenius de Cockschool aan de Boven Nieuwstraat. De beerkuilen bevatten het afval van twee huishoudens. Van een aantal runderen was een schofthoogte te reconstrueren. Naast nederzettingsafval zijn een aantal benen objecten gevonden. "@nl .
 
@@ -5607,6 +5659,8 @@ Zie ook cluster 1290."""@nl .
         bo:complextype "Stad" ;
         bo:gemeente "Kampen" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0166> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv23> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "101-1000 bones" ;
         bo:onderzoeker "Laarman, F.J.; Amersfoort" ;
@@ -5616,7 +5670,6 @@ Zie ook cluster 1290."""@nl .
         bo:verzamelwijze "hand collected + sieved" ;
         bo:vondstdatum "00-12-1987" ;
         bo:vondstjaar 1987 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 30 ;
         ceo:archis2Waarnemingsnummer "41238" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/30_1>,
@@ -5650,6 +5703,7 @@ Zie ook cluster 1290."""@nl .
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/30> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/30> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/30> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Kampen" ;
         schema:description "Onderzoek aan botmateriaal dat is opgegraven tijdens een proefopgraving op het terrein de 'Kokpanden', dat direct achter de aan Oudestraat gelegen huizen grenst. Dit terrein was aan het einde van de 13e eeuw bouwrijp gemaakt. Het gaat o.a. om botresten uit een beerkelder (waaronder een skelet van een vrouw, die vermoedelijk in haar geheel in de beerkelder is gegooid). Naast nederzettingsafval zijn er enkele benen objecten gevonden.  "@nl .
 
@@ -5659,6 +5713,8 @@ Zie ook cluster 1290."""@nl .
         bo:complextype "Kasteel" ;
         bo:gemeente "Valkenburg aan de Geul" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0994> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv31> ;
         bo:invoerder "Lauwerier, R.C.G.M." ;
         bo:omvang "more than 1000 bones" ;
         bo:onderzoeker "Zeiler, J.T.; Groningen" ;
@@ -5668,7 +5724,6 @@ Zie ook cluster 1290."""@nl .
         bo:verzamelwijze "hand collected, intensive" ;
         bo:vondstdatum "20-03-1972" ;
         bo:vondstjaar 1972 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 27 ;
         ceo:archis2Waarnemingsnummer "29718" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/27_1>,
@@ -5712,6 +5767,7 @@ Zie ook cluster 1290."""@nl .
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/27> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/27> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/27> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Valkenburg" ;
         schema:description "In het midden van de jaren '70 is in de ruine van het kasteel een opgraving verricht, waarbij een groot aantal faunaresten uit de 11e-12e eeuw werd verzameld. Rund was het belangrijkste consumptiedier, gevolgd door varken en schaap/geit. In het algemeen speelde de jacht een geringe rol in de vlees- voorziening. Mogelijk hebben de kasteelbewoners ook met valken en sperwers gejaagd op vogels. Het konijn is intrusief (13e-15e eeuw). "@nl .
 
@@ -5721,6 +5777,8 @@ Zie ook cluster 1290."""@nl .
         bo:complextype "Basiskamp/-nederzetting" ;
         bo:gemeente "Niedorp" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0412> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv27> ;
         bo:invoerder "Lauwerier, R.C.G.M." ;
         bo:omvang "more than 1000 bones" ;
         bo:onderzoeker "Vries de, L.; Amersfoort" ;
@@ -5730,7 +5788,6 @@ Zie ook cluster 1290."""@nl .
         bo:verzamelwijze "sieved, coarse: >= 4mm" ;
         bo:vondstdatum "00-00-1994" ;
         bo:vondstjaar 1992 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 29 ;
         ceo:archis2Waarnemingsnummer "32331" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/29_1>,
@@ -5779,6 +5836,7 @@ Zie ook cluster 1290."""@nl .
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/29> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/29> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/29> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Winkel" ;
         schema:description "Materiaal uit een nederzetting bij Nieuwe Niedorp uit de Standvoetbeker periode. Het bot was heel erg gefragmenteerd. Het gaat om een basis nederzetting:uit de diersoorten blijkt dat zowel in de zomer als in de winter activiteiten plaatsvonden. De site lag in een waterrijke omgeving aan de kust. Men leefde van de veeteelt, de jacht op (water)vogels, de visvangst en schelpdieren. De jacht was ondergeschikt aan de veeteelt.  "@nl .
 
@@ -5788,6 +5846,8 @@ Zie ook cluster 1290."""@nl .
         bo:complextype "Stad" ;
         bo:gemeente "Kampen" ;
         bo:gewogen true ;
+        bo:heeftGemeente <https://identifier.overheid.nl/tooi/id/gemeente/gm0166> ;
+        bo:heeftProvincie <https://identifier.overheid.nl/tooi/id/provincie/pv23> ;
         bo:invoerder "Vries de, L.S." ;
         bo:omvang "more than 1000 bones" ;
         bo:onderzoeker "Laarman, F.J.; Amersfoort, Osmania" ;
@@ -5797,7 +5857,6 @@ Zie ook cluster 1290."""@nl .
         bo:verzamelwijze "hand collected" ;
         bo:vondstdatum "00-06-1988" ;
         bo:vondstjaar 1988 ;
-        bo:vondstverwerving "Archeologisch: opgraving" ;
         bo:zoonr 32 ;
         ceo:archis2Waarnemingsnummer "41239" ;
         ceo:bevatObject <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/occurrence/32_1>,
@@ -5846,6 +5905,7 @@ Zie ook cluster 1290."""@nl .
         ceo:heeftDatering <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/datering/32> ;
         ceo:heeftGeometrie <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/geometry/32> ;
         ceo:heeftLocatieAanduiding <https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/locatie/32> ;
+        ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;
         schema:addressLocality "Kampen" ;
         schema:description "Onderzoek aan faunaresten uit een afvalkuil, drie beerputten en een waterput. De afvalkuil hoort bij een houten huis, dat voor het einde van de 14e eeuw is afgebrand. De beerputten bevatten materiaal uit de 14e -17e eeuw. De waterput is tot het eind van de 18e eeuw in gebruik geweest. Naast nederzettingsafval zijn er ook enkele benen gebruiksvoorwerpen gevonden (kammen, speelgoed en muziekinstrumenten)."@nl .
 }

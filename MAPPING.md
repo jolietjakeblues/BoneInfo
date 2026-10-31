@@ -4,12 +4,12 @@
 > zoeksite, kruislink). Dit document gaat alleen over de RDF-mapping zelf.
 
 Bron: `BoneInfo_V01_10.mdb` (Access). Volledige dataset: 2.434 clusters,
-273.542 triples, in één named graph (TriG). Daarnaast een pilot-subset van
+278.370 triples, in één named graph (TriG). Daarnaast een pilot-subset van
 30 clusters die zowel diersoorten als publicaties hebben, voor snelle review.
 
 Bestanden (in [`output/`](output/)):
-- `boneinfo_full.trig` (273.542 triples) / `boneinfo_full_es.ndjson` (2.434 docs)
-- `boneinfo_pilot.trig` (5.047 triples) / `boneinfo_pilot_es.ndjson` (30 docs)
+- `boneinfo_full.trig` (278.370 triples) / `boneinfo_full_es.ndjson` (2.434 docs)
+- `boneinfo_pilot.trig` (5.106 triples) / `boneinfo_pilot_es.ndjson` (30 docs)
 
 ## Namespace
 
@@ -21,6 +21,9 @@ geo:    http://www.opengis.net/ont/geosparql#
 dwc:    http://rs.tdwg.org/dwc/terms/
 schema: https://schema.org/
 skos:   http://www.w3.org/2004/02/skos/core#
+cht:    https://data.cultureelerfgoed.nl/term/id/rn/2/            (RCE-thesaurus "verwervingswijzen")
+tooi-gm: https://identifier.overheid.nl/tooi/id/gemeente/
+tooi-pv: https://identifier.overheid.nl/tooi/id/provincie/
 ```
 
 Alle triples staan in TriG in de named graph
@@ -51,7 +54,10 @@ bo:cluster/15 a ceo:Vondstlocatie, ceo:ArcheologischComplex ;
     rdfs:label "Crematiegraf, HOGENHOF"@nl ;
     schema:addressLocality "Malden" ;
     schema:description "..."@nl ;
-    bo:complextype / bo:gemeente / bo:provincie / bo:vondstverwerving /
+    ceo:heeftVerwerving cht:00714835-b307-4990-8f11-12b6d62bf1ba ;  # "archeologisch: opgraving"
+    bo:heeftGemeente tooi-gm:gm0252 ;                               # Heumen
+    bo:heeftProvincie tooi-pv:pv25 ;                                # Gelderland
+    bo:complextype / bo:gemeente / bo:provincie /
     bo:verzamelwijze / bo:omvang / bo:gewogen / bo:opdrachtgever /
     bo:onderzoeksinstantie / bo:onderzoeker / bo:invoerder /
     bo:vondstdatum / bo:vondstjaar  "..." .
@@ -150,21 +156,29 @@ hoeven genereren.
 
 1. ~~**Namespace**~~ — opgelost: `https://linkeddata.cultureelerfgoed.nl/archeozoologie/id/boneinfo/`,
    named graph `https://linkeddata.cultureelerfgoed.nl/archeozoologie/graph/boneinfo`.
-2. **Gemeente/provincie** staan nu als platte strings (`bo:gemeente`,
-   `bo:provincie`). RCE's eigen CEO-data koppelt dit aan OWMS-concepten
-   (`resolve_concept_label(graph_name="owms")`). Dat kan alsnog toegevoegd
-   worden — het is per uniek gemeentenaam een lookup (~enkele honderden
-   unieke waarden in de volledige dataset, dus goedkoop om te doen), maar is
-   voor de pilot overgeslagen.
-3. **heeftVerwerving/heeftToestand** — CEO's eigen properties hiervoor
-   verwachten een `skos:Concept` (uit de CHT-thesaurus), geen vrije tekst.
-   BoneInfo's waarden ("Archeologisch: opgraving", "hand collected,
-   intensive + sieved, coarse") zijn *niet* 1-op-1 te matchen met CHT-termen
-   zonder een handmatige crosswalk-tabel te maken. Daarom nu als eigen
-   `bo:vondstverwerving`/`bo:verzamelwijze`-literal, in plaats van
-   `ceo:heeftVerwerving` met een verkeerd datatype te vullen. Een
-   crosswalk-tabel (BoneInfo-waarde → CHT-URI) zou dit alsnog correct
-   oplosbaar maken, als gewenst.
+2. ~~**Gemeente/provincie**~~ — opgelost: naast de bestaande `bo:gemeente`/
+   `bo:provincie`-literals staat nu ook `bo:heeftGemeente`/`bo:heeftProvincie`
+   naar een **TOOI**-concept (`identifier.overheid.nl/tooi`), niet OWMS —
+   TOOI is de huidige standaard en kent, anders dan OWMS, geen apart
+   "kadastrale gemeente"-concept per naam (dus geen ambiguïteit daarover).
+   307 van de 327 unieke gemeentenamen (2.395 van de 2.434 clusters) zijn
+   gekoppeld; de rest (ambigue namen als "Bergen", brondatafouten, gemeenten
+   van vóór TOOI's dekking, of een plaats/buurtschap in dit veld) is bewust
+   ongekoppeld gelaten. Zie [`scripts/crosswalk.py`](scripts/crosswalk.py)
+   voor de volledige tabel en TODO.md voor de motivatie.
+3. ~~**heeftVerwerving/heeftToestand**~~ — deels opgelost, deels
+   heroverwogen:
+   - `ceo:heeftVerwerving` i.p.v. `bo:vondstverwerving` is nu geïmplementeerd:
+     alle 17 unieke `Vondstverwerving`-brondatawaarden zijn met de hand
+     gekoppeld aan een concept uit de RCE-thesaurus (`rn/2`,
+     "verwervingswijzen"). `bo:vondstverwerving` blijft alleen als vangnet
+     voor een onverwachte toekomstige waarde (komt in de huidige dataset
+     dus nergens voor). Zie [`scripts/crosswalk.py`](scripts/crosswalk.py).
+   - `ceo:heeftToestand` voor `bo:verzamelwijze` is **afgewezen**, niet
+     geïmplementeerd: bij nader inzien gaat `ceo:heeftToestand` over de
+     *conditie* van een vondst (heel/gebroken/verweerd), niet over de
+     verzamelmethode — het verkeerde doelpredicaat. `bo:verzamelwijze`
+     blijft daarom een literal. Zie TODO.md voor de volledige afweging.
 4. **Datering-keten** is verkort (zie boven) — akkoord, of toch de volledige
    `ceo:Gebeurtenis`-laag erin?
 5. **`bo:heeftTaxon`** — enige echt nieuwe property; akkoord, of is er een
@@ -185,7 +199,7 @@ Het script leest de brontabellen uit CSV-exports van de Access-database (zie
 CSV's zelf opnieuw exporteert.
 
 De volledige dataset is al gegenereerd: 2.434 clusters, 1.183 van de 1.390
-soorten gebruikt, 184 tijdschriften, 51 periode-concepten, **273.542
+soorten gebruikt, 184 tijdschriften, 51 periode-concepten, **278.370
 triples** in `boneinfo_full.trig`. De CSV-export en verwerkingslogica zijn
 voor beide varianten identiek.
 
