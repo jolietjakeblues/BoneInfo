@@ -1,7 +1,7 @@
 import { search, searchAll, findByZoonr, facets, fields, hitSource, jaarTekst, PAGE_SIZE } from './search.js';
 import { parsePoint, centroidLatLon } from './geo.js';
 import { fetchDetail, fetchCollectionStats } from './detail.js';
-import { fetchGerelateerdErfgoed } from './related.js';
+import { fetchGerelateerdErfgoed, fetchRadar } from './related.js';
 import { t, getLang, setLang, LANGS, DEFAULT_LANG } from './i18n.js';
 
 // De brondatabase heeft voor "diergroep" alleen Engelstalige categorieën
@@ -340,6 +340,17 @@ async function openDetail(hit) {
     erfgoedBox = el('div', 'loading', t('statusLooking'));
     body.appendChild(erfgoedBox);
   }
+  // RADAR: alleen zichtbaar als er een match is; zonder match (de meeste clusters) of bij een fout staat er niets
+  let radarKop = null;
+  let radarBox = null;
+  if (waarnemingsnummer) {
+    radarKop = el('h3', null, t('headingRadar'));
+    radarBox = el('div');
+    radarKop.hidden = true;
+    radarBox.hidden = true;
+    body.appendChild(radarKop);
+    body.appendChild(radarBox);
+  }
 
   body.appendChild(el('h3', null, t('headingSpecies')));
   const soortenBox = el('div', 'loading', t('statusLoading'));
@@ -364,6 +375,18 @@ async function openDetail(hit) {
     panel.removeAttribute('aria-busy');
   }
 
+  if (radarBox) {
+    fetchRadar(waarnemingsnummer).then(
+      (items) => {
+        if (!items.length) return;
+        renderRadar(radarBox, items);
+        radarKop.hidden = false;
+        radarBox.hidden = false;
+      },
+      (e) => console.error('RADAR', e)
+    );
+  }
+
   if (erfgoedBox) {
     try {
       const gerelateerd = await fetchGerelateerdErfgoed({ waarnemingsnummer, vondstmeldingsnummer });
@@ -373,6 +396,25 @@ async function openDetail(hit) {
       erfgoedBox.textContent = t('relatedError') + e.message;
     }
   }
+}
+
+function renderRadar(box, items) {
+  box.innerHTML = '';
+  box.appendChild(el('p', 'hint', t('radarHint')));
+  const ul = el('ul', 'related-list');
+  for (const item of items) {
+    const li = el('li');
+    const a = document.createElement('a');
+    a.href = item.url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.textContent = `RADAR-site ${item.siteNr}${item.naam ? `: ${item.naam}` : ''}`;
+    li.appendChild(a);
+    // een site zonder plantenwaarnemingen in de dataset toont geen aantallen (niet hetzelfde als "geen planten")
+    if (item.waarnemingen > 0) li.appendChild(el('span', 'ref-sub', t('radarSummary', item.waarnemingen, item.taxa)));
+    ul.appendChild(li);
+  }
+  box.appendChild(ul);
 }
 
 function renderGerelateerdErfgoed(box, items) {
