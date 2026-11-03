@@ -121,6 +121,25 @@ onderzoek"):
    (erfgoed-cho-zoekdemo), functie `loadBoneInfo()` in `web/app.js` daar.
    Niet in deze repo — wijzig die kant in de `elastic-ceo`-repo zelf.
 
+### Kruislink naar RADAR (archeobotanie)
+
+Dezelfde vindplaats kan ook archeobotanisch zijn onderzocht. RADAR, de
+archeobotanische referentiedatabase, draagt hetzelfde archis2-waarnemingsnummer.
+Een clusterdetail toont daarom, als er een RADAR-site met hetzelfde
+waarnemingsnummer is, de sectie *Archeobotanie (RADAR)* met een link naar die
+site (`https://radar.jolietjakeblues64.workers.dev/?site=<nummer>`) en het aantal
+plantenwaarnemingen en taxa. Code: `fetchRadar()` in `web/related.js`,
+`renderRadar()` in `web/app.js`.
+
+- Alleen waarnemingsnummer; RADAR kent geen meldingsnummer.
+- Een RADAR-site waarvan het nummer in de RADAR-bron als onzeker is gemarkeerd
+  (`ar?`) wordt niet gekoppeld.
+- De sectie verschijnt alleen bij een match. Op 3 november 2026 hadden 604 van
+  de 2.118 clusters met een waarnemingsnummer een RADAR-match. Zonder match, of
+  als RADAR niet bereikbaar is, staat er niets.
+- De andere richting (RADAR → BoneInfo) zit in de RADAR-repo (`web/related.js`
+  daar).
+
 ## Mappen
 
 | Pad | Inhoud |

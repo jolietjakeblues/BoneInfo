@@ -77,3 +77,49 @@ export async function fetchGerelateerdErfgoed({ waarnemingsnummer, vondstmelding
     };
   });
 }
+
+// ---- RADAR (archeobotanie) ----------------------------------------------------------------
+// Dezelfde vindplaats kan zowel archeozoologisch (BoneInfo) als archeobotanisch (RADAR) onderzocht zijn;
+// beide dragen het archis2-waarnemingsnummer. Een RADAR-site waarvan het nummer als onzeker is gemarkeerd
+// ("ar?" in de RADAR-bron) wordt niet gekoppeld. Alleen waarnemingsnummer: RADAR kent geen meldingsnummer.
+const RADAR_ENDPOINT = 'https://api.linkeddata.cultureelerfgoed.nl/datasets/archeobotanie/radar-elastic/services/Radar/_search';
+const RADAR_SITE = 'https://radar.jolietjakeblues64.workers.dev/';
+const RR = 'https://linkeddata cultureelerfgoed nl/def/radar-elastic#';
+
+export async function fetchRadar(waarnemingsnummer) {
+  if (!waarnemingsnummer) return [];
+  let res;
+  try {
+    res = await fetch(RADAR_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'omit',
+      body: JSON.stringify({
+        size: 10,
+        _source: ['siteNr', 'locatienaam', 'plaats', 'aantalWaarnemingen', 'wetenschappelijkeNaam'].map((v) => RR + v),
+        query: {
+          bool: {
+            filter: [{ term: { [`${RR}waarnemingsnummer.keyword`]: String(waarnemingsnummer) } }],
+            must_not: [{ term: { [`${RR}waarnemingsnummerOnzeker`]: true } }],
+          },
+        },
+      }),
+    });
+  } catch (e) {
+    throw new Error('Kan RADAR niet bereiken.');
+  }
+  if (!res.ok) throw new Error(`Opzoeken in RADAR mislukt (${res.status}).`);
+  const data = await res.json();
+  return data.hits.hits.map((h) => {
+    const s = h._source;
+    const one = (f) => (Array.isArray(s[f]) ? s[f][0] : s[f]);
+    const siteNr = one(`${RR}siteNr`);
+    return {
+      siteNr,
+      naam: one(`${RR}locatienaam`) || one(`${RR}plaats`),
+      waarnemingen: Number(one(`${RR}aantalWaarnemingen`)) || 0,
+      taxa: (Array.isArray(s[`${RR}wetenschappelijkeNaam`]) ? s[`${RR}wetenschappelijkeNaam`] : []).length,
+      url: siteNr != null ? `${RADAR_SITE}?site=${encodeURIComponent(siteNr)}` : RADAR_SITE,
+    };
+  });
+}
